@@ -54,23 +54,13 @@ const HEARING_IDS = new Set(['V10', 'V11', 'V5', 'V8', 'V9', 'V12']);
   {playlists.length > 0 && (
     <section class="playlists-section">
       <h2>Playlists</h2>
-      <div class="playlists-grid">
-        {playlists.map((p: { id: string; youtube_playlist: string; title: string; description: string }) => (
-          <div class="playlist-card" id={p.id}>
-            <div class="embed-wrapper">
-              <iframe
-                src={`https://www.youtube.com/embed/videoseries?list=${p.youtube_playlist}`}
-                title={p.title}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen
-              />
-            </div>
-            <h3 class="playlist-title">{p.title}</h3>
-            <p class="playlist-desc">{p.description}</p>
-            <a href={`https://www.youtube.com/playlist?list=${p.youtube_playlist}`} target="_blank" rel="noopener noreferrer" class="playlist-link">Voir la playlist sur YouTube →</a>
-          </div>
+      <ul class="playlists-list">
+        {playlists.map((p: { id: string; youtube_playlist: string; title: string }) => (
+          <li id={p.id}>
+            <a href={`https://www.youtube.com/playlist?list=${p.youtube_playlist}`} target="_blank" rel="noopener noreferrer" class="playlist-line">{p.title}</a>
+          </li>
         ))}
-      </div>
+      </ul>
     </section>
   )}
 
@@ -293,45 +283,30 @@ const HEARING_IDS = new Set(['V10', 'V11', 'V5', 'V8', 'V9', 'V12']);
   }
 
   .playlists-section h2 {
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
   }
 
-  .playlists-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    max-width: 900px;
-  }
-
-  .playlist-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-
-  .playlist-title {
-    padding: 1rem 1rem 0;
-    font-size: 1.1rem;
+  .playlists-list {
+    list-style: none;
     margin: 0;
+    padding: 0;
+  }
+
+  .playlists-list li {
+    padding: 0.35rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .playlists-list li:last-child {
+    border-bottom: none;
+  }
+
+  .playlist-line {
+    font-size: 1rem;
     color: var(--accent);
   }
 
-  .playlist-desc {
-    padding: 0.5rem 1rem;
-    margin: 0;
-    font-size: 0.875rem;
-    color: var(--text-muted);
-  }
-
-  .playlist-link {
-    display: inline-block;
-    padding: 0.5rem 1rem 1rem;
-    font-size: 0.9rem;
-    color: var(--accent);
-  }
-
-  .playlist-link:hover {
+  .playlist-line:hover {
     text-decoration: underline;
   }
 </style>

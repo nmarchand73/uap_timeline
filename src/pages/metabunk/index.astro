@@ -151,6 +151,7 @@ const forumAliensUrl = 'https://www.metabunk.org/forums/ufos-and-aliens.10/';
 
   .tab {
     padding: 0.5rem 1rem;
+    min-height: 44px;
     font-size: 0.9375rem;
     font-family: inherit;
     font-weight: 500;
@@ -160,6 +161,8 @@ const forumAliensUrl = 'https://www.metabunk.org/forums/ufos-and-aliens.10/';
     border-radius: var(--radius);
     cursor: pointer;
     transition: color 0.15s, background 0.15s, border-color 0.15s;
+    display: inline-flex;
+    align-items: center;
   }
 
   .tab:hover {
@@ -188,8 +191,8 @@ const forumAliensUrl = 'https://www.metabunk.org/forums/ufos-and-aliens.10/';
   }
 
   .search-input {
-    flex: 1;
-    min-width: 200px;
+    flex: 1 1 auto;
+    min-width: 0;
     max-width: 400px;
     padding: 0.5rem 0.75rem;
     font-size: 1rem;
@@ -247,6 +250,8 @@ const forumAliensUrl = 'https://www.metabunk.org/forums/ufos-and-aliens.10/';
   .thread-link {
     display: block;
     padding: 0.5rem 0.75rem;
+    min-height: 44px;
+    box-sizing: border-box;
     border-radius: var(--radius);
     color: var(--text);
     text-decoration: none;
@@ -274,5 +279,28 @@ const forumAliensUrl = 'https://www.metabunk.org/forums/ufos-and-aliens.10/';
 
   .outro a {
     font-weight: 500;
+  }
+
+  @media (max-width: 480px) {
+    .search-input {
+      width: 100%;
+      max-width: none;
+    }
+
+    .toolbar {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .tab {
+      flex: 1;
+      min-width: 0;
+      justify-content: center;
+    }
+
+    .thread-link {
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
   }
 </style>

@@ -139,6 +139,7 @@ const navGroups = [
     flex-direction: column;
     position: relative;
     overflow-x: hidden;
+    -webkit-tap-highlight-color: rgba(0, 212, 170, 0.2);
   }
 
   body::before {
@@ -303,11 +304,23 @@ const navGroups = [
   .main {
     flex: 1;
     padding: 1.5rem 1rem 2rem;
+    min-width: 0;
+  }
+
+  @media (max-width: 480px) {
+    .main {
+      padding: 1rem 0.75rem 1.5rem;
+    }
+
+    .main h1 {
+      font-size: 1.5rem;
+    }
   }
 
   .main-inner {
     max-width: var(--content-max);
     margin: 0 auto;
+    min-width: 0;
   }
 
   .main h1 {

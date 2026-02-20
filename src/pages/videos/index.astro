@@ -176,7 +176,7 @@ const HEARING_IDS = new Set(['V10', 'V11', 'V5', 'V8', 'V9', 'V12']);
 
   .videos-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(360px, 100%), 1fr));
     gap: 1.5rem;
   }
 
@@ -365,5 +365,22 @@ const HEARING_IDS = new Set(['V10', 'V11', 'V5', 'V8', 'V9', 'V12']);
   .analysis-link:hover {
     background: rgba(0, 212, 170, 0.1);
     text-decoration: none;
+  }
+
+  @media (max-width: 480px) {
+    .videos-grid {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    .video-card h4,
+    .description {
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+
+    .main .intro {
+      font-size: 0.9375rem;
+    }
   }
 </style>

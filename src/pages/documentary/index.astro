@@ -1,0 +1,372 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+const chaptersPath = path.join(process.cwd(), 'content', 'documentary-chapters.json');
+const chapters = JSON.parse(fs.readFileSync(chaptersPath, 'utf-8'));
+const docsPath = path.join(process.cwd(), 'content', 'docs-meta.json');
+const docs = JSON.parse(fs.readFileSync(docsPath, 'utf-8'));
+const subtitlesPath = path.join(process.cwd(), 'content', 'subtitles-index.json');
+const subtitlesIndex = fs.existsSync(subtitlesPath) ? JSON.parse(fs.readFileSync(subtitlesPath, 'utf-8')) : [];
+---
+
+<BaseLayout title="Documentaire — The Age of Disclosure" description="Player vidéo avec 47 chapitres cliquables. Sous-titres français. Cross-références vers documents, personnes et incidents.">
+  <h1>The Age of Disclosure</h1>
+  <p class="intro">Documentaire 2025, Dan Farah. 1h48. 47 chapitres cliquables. Sous-titres français. Voir <a href="/documentary/analysis/">l'analyse détaillée</a>.</p>
+
+  <div class="player-section">
+    <div class="video-wrapper">
+      <video id="doc-video" controls preload="metadata" class="video-player" >
+        <source src="/video/The.Age.Of.Disclosure.2025.mkv" type="video/x-matroska" />
+        <track kind="subtitles" src="/video/The.Age.Of.Disclosure.2025.vtt" srclang="fr" label="Français" default />
+        Votre navigateur ne supporte pas la vidéo HTML5.
+      </video>
+      <div id="video-error" class="video-error" hidden>
+        <p>Vidéo non trouvée. Placez <code>The.Age.Of.Disclosure.2025.mkv</code> dans <code>public/video/</code>.</p>
+        <p>Les chapitres restent cliquables pour naviguer une fois la vidéo chargée.</p>
+      </div>
+    </div>
+
+    <aside class="chapters-sidebar">
+      <h3>Chapitres</h3>
+      <ul class="chapters-list">
+        {chapters.map((ch: { id: number; timestamp_seconds: number; title: string; doc_refs: string[]; people_refs: string[]; incident_refs: string[]; key_quote: string | null }) => (
+          <li class="chapter-item" data-chapter-id={ch.id}>
+            <button
+              type="button"
+              class="chapter-btn"
+              data-timestamp={ch.timestamp_seconds}
+            >
+              <span class="chapter-time">{Math.floor(ch.timestamp_seconds / 60)}:{(ch.timestamp_seconds % 60).toString().padStart(2, '0')}</span>
+              <span class="chapter-title">{ch.title}</span>
+            </button>
+            <div class="chapter-refs">
+              {ch.key_quote && <blockquote class="key-quote">"{ch.key_quote}"</blockquote>}
+              {ch.doc_refs?.length > 0 && (
+                <div class="refs">
+                  {ch.doc_refs.map((slug: string) => {
+                    const doc = docs.find((d: { slug: string }) => d.slug === slug);
+                    return doc ? <a href={`/documents/${doc.slug}/`} class="ref-badge doc">📄 {doc.slug.replace(/-/g, ' ')}</a> : null;
+                  })}
+                </div>
+              )}
+              {ch.people_refs?.length > 0 && (
+                <div class="refs">
+                  {ch.people_refs.slice(0, 3).map((id: string) => (
+                    <a href={`/people/${id}/`} class="ref-badge person">👤 {id.replace(/-/g, ' ')}</a>
+                  ))}
+                </div>
+              )}
+              {ch.incident_refs?.length > 0 && (
+                <div class="refs">
+                  {ch.incident_refs.slice(0, 2).map((id: string) => (
+                    <a href={`/incidents/#${id}`} class="ref-badge incident">📍 {id.replace(/-/g, ' ')}</a>
+                  ))}
+                </div>
+              )}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </aside>
+  </div>
+
+  <section class="subtitle-search">
+    <h3>Rechercher dans les sous-titres</h3>
+    <input type="search" id="subtitle-search-input" placeholder="Ex: Elizondo, Nimitz, Grusch..." />
+    <div id="subtitle-results" class="subtitle-results"></div>
+  </section>
+
+  <p class="note">Si la vidéo n'est pas disponible, placez le fichier <code>The.Age.Of.Disclosure.2025.mkv</code> dans <code>public/video/</code>. Sous-titres : <code>npm run srt-to-vtt</code>. Index recherche : <code>npm run subtitles-index</code>.</p>
+</BaseLayout>
+
+<script type="module">
+  import Fuse from 'fuse.js';
+
+  const subtitlesData = JSON.parse(document.getElementById('subtitles-data')?.textContent || '[]');
+  const fuse = new Fuse(subtitlesData, { keys: ['text'], threshold: 0.4 });
+  const input = document.getElementById('subtitle-search-input');
+  const results = document.getElementById('subtitle-results');
+  const video = document.getElementById('doc-video');
+
+  if (input && results) {
+    input.addEventListener('input', function() {
+      const q = input.value.trim();
+      if (!q || q.length < 2) {
+        results.innerHTML = '';
+        results.hidden = true;
+        return;
+      }
+      const matches = fuse.search(q).slice(0, 15);
+      results.innerHTML = matches.map(function(m) {
+        const seg = m.item;
+        const min = Math.floor(seg.start_seconds / 60);
+        const sec = seg.start_seconds % 60;
+        const ts = min + ':' + (sec < 10 ? '0' : '') + sec;
+        return '<button type="button" class="subtitle-result" data-ts="' + seg.start_seconds + '">' +
+          '<span class="ts">' + ts + '</span> ' +
+          '<span class="text">' + seg.text.slice(0, 80) + (seg.text.length > 80 ? '…' : '') + '</span></button>';
+      }).join('');
+      results.hidden = false;
+    });
+    results.addEventListener('click', function(ev) {
+      const btn = ev.target.closest('.subtitle-result');
+      if (btn && video) {
+        video.currentTime = parseInt(btn.getAttribute('data-ts') || '0', 10);
+        video.play();
+      }
+    });
+  }
+
+  if (video) {
+    video.addEventListener('timeupdate', function() {
+      const t = video.currentTime;
+      document.querySelectorAll('.chapter-btn').forEach(function(btn) {
+        const ts = parseInt(btn.getAttribute('data-timestamp') || '0', 10);
+        const li = btn.closest('.chapter-item');
+        if (li) {
+          const next = li.nextElementSibling?.querySelector('.chapter-btn');
+          const nextTs = next ? parseInt(next.getAttribute('data-timestamp') || '99999', 10) : 99999;
+          if (t >= ts && t < nextTs) {
+            li.classList.add('current');
+          } else {
+            li.classList.remove('current');
+          }
+        }
+      });
+    });
+  }
+</script>
+<script type="application/json" id="subtitles-data">
+  {JSON.stringify(subtitlesIndex)}
+</script>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', function() {
+    var video = document.getElementById('doc-video');
+    var errEl = document.getElementById('video-error');
+    if (video) {
+      video.addEventListener('error', function() {
+        if (errEl) { errEl.hidden = false; }
+      });
+      var hash = window.location.hash;
+      if (hash && hash.startsWith('#t=')) {
+        var ts = parseInt(hash.slice(3), 10);
+        if (!isNaN(ts)) {
+          video.currentTime = ts;
+          video.play();
+        }
+      }
+    }
+    document.querySelectorAll('.chapter-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var ts = parseInt(btn.getAttribute('data-timestamp') || '0', 10);
+        var v = document.getElementById('doc-video');
+        if (v) {
+          v.currentTime = ts;
+          v.play();
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .intro {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+  }
+
+  .player-section {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 2rem;
+  }
+
+  .video-wrapper {
+    background: #000;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .video-error {
+    position: absolute;
+    inset: 0;
+    background: var(--bg-card);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .video-error[hidden] {
+    display: none;
+  }
+
+  .video-player {
+    width: 100%;
+    display: block;
+  }
+
+  .chapters-sidebar {
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+
+  .chapters-sidebar h3 {
+    margin-bottom: 1rem;
+  }
+
+  .chapters-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .chapters-list li {
+    margin-bottom: 0.5rem;
+  }
+
+  .chapter-refs {
+    margin-top: 0.25rem;
+    padding-left: 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .key-quote {
+    margin: 0.25rem 0;
+    padding: 0.25rem 0.5rem;
+    background: var(--bg-elevated);
+    border-left: 3px solid var(--accent);
+    font-style: italic;
+  }
+
+  .refs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-top: 0.25rem;
+  }
+
+  .ref-badge {
+    padding: 0.15rem 0.35rem;
+    border-radius: 4px;
+    background: var(--bg-elevated);
+    color: var(--accent);
+  }
+
+  .ref-badge:hover {
+    text-decoration: none;
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  .chapter-btn {
+    width: 100%;
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    cursor: pointer;
+    font-size: 0.875rem;
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .chapter-btn:hover {
+    border-color: var(--accent);
+    background: var(--bg-elevated);
+  }
+
+  .chapter-item.current .chapter-btn {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  .subtitle-search {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+
+  .subtitle-search h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+  }
+
+  .subtitle-search input {
+    width: 100%;
+    max-width: 400px;
+    padding: 0.5rem;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+  }
+
+  .subtitle-results {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .subtitle-results[hidden] {
+    display: none;
+  }
+
+  .subtitle-result {
+    text-align: left;
+    padding: 0.5rem;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    cursor: pointer;
+    font-size: 0.85rem;
+  }
+
+  .subtitle-result:hover {
+    border-color: var(--accent);
+  }
+
+  .subtitle-result .ts {
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+    margin-right: 0.5rem;
+  }
+
+  .chapter-time {
+    flex-shrink: 0;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .chapter-title {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .note {
+    margin-top: 2rem;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 900px) {
+    .player-section {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

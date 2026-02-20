@@ -1,0 +1,163 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+const dirdsPath = path.join(process.cwd(), 'content', 'dirds.json');
+const analysisPath = path.join(process.cwd(), 'content', 'dirds-analysis.json');
+const dirds = JSON.parse(fs.readFileSync(dirdsPath, 'utf-8'));
+let analyses = {};
+try {
+  analyses = JSON.parse(fs.readFileSync(analysisPath, 'utf-8') || '{}');
+} catch {
+  analyses = {};
+}
+
+const allDomains = [...new Set(dirds.flatMap((d) => analyses[String(d.id)]?.domains || []))].sort();
+---
+
+<BaseLayout title="DIRD — Analyses pour ingénieurs" description="37 rapports DIRD (AAWSAP/AATIP) avec analyses techniques pour ingénieurs en informatique et électronique.">
+  <h1>DIRD — Analyses pour ingénieurs</h1>
+  <p class="intro">37 Defense Intelligence Reference Documents (AAWSAP/AATIP) déclassifiés. Analyses techniques ciblées informatique/électronique.</p>
+
+  {allDomains.length > 0 && (
+    <div class="filter-bar" id="domain-filter">
+      <span class="filter-label">Domaine :</span>
+      <button type="button" class="filter-btn active" data-domain="">Tous</button>
+      {allDomains.map((dom) => (
+        <button type="button" class="filter-btn" data-domain={dom}>{dom}</button>
+      ))}
+    </div>
+  )}
+
+  <div class="dirds-grid">
+    {dirds.map((d) => {
+      const a = analyses[String(d.id)];
+      const domains = a?.domains || [];
+      const domainAttr = domains.join(' ');
+      return (
+        <a href={`/dirds/${d.id}/`} class="dird-card" data-domains={domainAttr}>
+          <span class="dird-num">DIRD {d.id}</span>
+          <h3>{d.title}</h3>
+          <p class="dird-author">{d.author} — {d.affiliation}</p>
+          {domains.length > 0 && (
+            <div class="badges">
+              {domains.map((dom) => (
+                <span class="badge">{dom}</span>
+              ))}
+            </div>
+          )}
+        </a>
+      );
+    })}
+  </div>
+</BaseLayout>
+
+<script>
+  document.querySelectorAll('.filter-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const domain = btn.getAttribute('data-domain');
+      document.querySelectorAll('.filter-btn').forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.dird-card').forEach((card) => {
+        const domains = card.getAttribute('data-domains') || '';
+        const show = !domain || domains.split(' ').includes(domain);
+        card.style.display = show ? '' : 'none';
+      });
+    });
+  });
+</script>
+
+<style>
+  .intro {
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .filter-label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  .filter-btn {
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text);
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+
+  .filter-btn:hover {
+    border-color: var(--accent);
+  }
+
+  .filter-btn.active {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+  }
+
+  .dirds-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .dird-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .dird-card:hover {
+    border-color: var(--accent);
+    background: var(--bg-elevated);
+    text-decoration: none;
+  }
+
+  .dird-num {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 0.35rem;
+  }
+
+  .dird-card h3 {
+    font-size: 0.9rem;
+    margin: 0 0 0.4rem;
+    line-height: 1.3;
+  }
+
+  .dird-author {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin: 0 0 0.5rem;
+  }
+
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+
+  .badge {
+    font-size: 0.65rem;
+    padding: 0.15rem 0.4rem;
+    background: var(--bg-elevated);
+    border-radius: 4px;
+    color: var(--text-muted);
+  }
+</style>

@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+const analysisPath = path.join(process.cwd(), 'doc', 'video', 'The.Age.Of.Disclosure.2025 Analysis.md');
+const content = fs.existsSync(analysisPath) ? fs.readFileSync(analysisPath, 'utf-8') : '';
+---
+
+<BaseLayout title="Analyse — The Age of Disclosure" description="Structure narrative, intervenants, moments clés et cross-références du documentaire.">
+  <article class="analysis-page">
+    <h1>Analyse : The Age of Disclosure</h1>
+    <p class="back"><a href="/documentary/">← Retour au documentaire</a></p>
+    <pre class="md-content">{content}</pre>
+  </article>
+</BaseLayout>
+
+<style>
+  .back { margin-bottom: 1.5rem; }
+  .md-content {
+    white-space: pre-wrap;
+    font-family: inherit;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    padding: 1rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow-x: auto;
+  }
+</style>

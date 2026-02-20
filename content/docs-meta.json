@@ -1,0 +1,323 @@
+[
+  {
+    "slug": "vallee-phenomenes-insolites",
+    "title": "Les phénomènes insolites de l'espace",
+    "authors": [
+      "Jacques Vallée",
+      "Janine Vallée"
+    ],
+    "year": 1967,
+    "language": "fr",
+    "type": "book",
+    "period_start": 1954,
+    "period_end": 1967,
+    "themes": [
+      "phenomene-mondial",
+      "perspective-francaise"
+    ],
+    "people": [
+      "jacques-vallee",
+      "j-allen-hynek"
+    ],
+    "incidents": [
+      "vague-francaise-1954",
+      "socorro-1964",
+      "washington-1952"
+    ],
+    "filename": "Les phénomènes insolites de l'espace -- Vallée, Jacques & Vallée, Janine -- 1967.md",
+    "epub_path": "/docs/vallee-phenomenes-insolites.epub"
+  },
+  {
+    "slug": "trinity-secret-mieux-garde",
+    "title": "TRINITY : Le secret le mieux gardé",
+    "authors": [
+      "Jacques Vallée",
+      "Paola Leopizzi Harris"
+    ],
+    "year": 2021,
+    "language": "fr",
+    "type": "book",
+    "period_start": 1945,
+    "period_end": 1964,
+    "themes": [
+      "lien-nucleaire",
+      "reverse-engineering"
+    ],
+    "people": [
+      "jacques-vallee",
+      "j-allen-hynek"
+    ],
+    "incidents": [
+      "trinity-crash-1945",
+      "socorro-1964",
+      "roswell-1947"
+    ],
+    "filename": "TRINITY_ Le secret le mieux gardé -- Leopizzi Harris, Paola; Vallée , Jacques -- New York, 2021.md",
+    "epub_path": "/docs/trinity-secret-mieux-garde.epub"
+  },
+  {
+    "slug": "skinwalkers-pentagon",
+    "title": "Skinwalkers at the Pentagon",
+    "authors": [
+      "James T. Lacatski",
+      "Colm A. Kelleher",
+      "George Knapp"
+    ],
+    "year": 2021,
+    "language": "en",
+    "type": "book",
+    "period_start": 1996,
+    "period_end": 2017,
+    "themes": [
+      "aawsap-aatip",
+      "effets-biologiques",
+      "reverse-engineering"
+    ],
+    "people": [
+      "james-lacatski",
+      "colm-kelleher",
+      "george-knapp",
+      "harry-reid",
+      "robert-bigelow",
+      "luis-elizondo",
+      "hal-puthoff",
+      "jacques-vallee"
+    ],
+    "incidents": [
+      "nimitz-tic-tac-2004",
+      "skinwalker-ranch"
+    ],
+    "filename": "Skinwalkers at the Pentagon_ An Insiders' Account of the -- Lacatski, James & Kelleher, Colm & Knapp, George -- 2021.md",
+    "epub_path": "/docs/skinwalkers-pentagon.epub"
+  },
+  {
+    "slug": "inside-us-gov-covert-ufo",
+    "title": "Inside the U.S. Government Covert UFO Program",
+    "authors": [
+      "James T. Lacatski",
+      "Colm A. Kelleher",
+      "George Knapp"
+    ],
+    "year": 2023,
+    "language": "en",
+    "type": "book",
+    "period_start": 2007,
+    "period_end": 2023,
+    "themes": [
+      "aawsap-aatip",
+      "observables-physique",
+      "lien-nucleaire",
+      "reverse-engineering"
+    ],
+    "people": [
+      "james-lacatski",
+      "colm-kelleher",
+      "george-knapp",
+      "luis-elizondo",
+      "hal-puthoff",
+      "jacques-vallee",
+      "david-fravor",
+      "ryan-graves",
+      "david-grusch"
+    ],
+    "incidents": [
+      "nimitz-tic-tac-2004",
+      "uss-roosevelt-2014",
+      "colares-1977",
+      "malmstrom-1967",
+      "lakenheath"
+    ],
+    "filename": "Inside the US Government Covert UFO Program_ Initial -- James T_ Lacatski; Colm A_ Kelleher; George Knapp -- PS, 2023.md",
+    "epub_path": "/docs/inside-us-gov-covert-ufo.epub"
+  },
+  {
+    "slug": "ovnis-lumiere-dossiers-dini",
+    "title": "Ovnis : Lumière sur les dossiers déclassifiés du Pentagone",
+    "authors": [
+      "Luc Dini"
+    ],
+    "year": 2023,
+    "language": "fr",
+    "type": "book",
+    "period_start": 1947,
+    "period_end": 2023,
+    "themes": [
+      "perspective-francaise",
+      "dissimulation",
+      "observables-physique"
+    ],
+    "people": [
+      "luis-elizondo",
+      "leslie-kean",
+      "david-grusch"
+    ],
+    "incidents": [
+      "nimitz-tic-tac-2004",
+      "washington-1952",
+      "roswell-1947"
+    ],
+    "filename": "Ovnis _ Lumière sur les dossiers déclassifiés du Pentagone -- Luc Dini-- 2023.md",
+    "epub_path": "/docs/ovnis-lumiere-dossiers-dini.epub"
+  },
+  {
+    "slug": "imminent-elizondo",
+    "title": "Imminent : Inside the Pentagon's Hunt for UFOs",
+    "authors": [
+      "Luis Elizondo"
+    ],
+    "year": 2024,
+    "language": "en",
+    "type": "book",
+    "period_start": 2004,
+    "period_end": 2024,
+    "themes": [
+      "aawsap-aatip",
+      "whistleblowers",
+      "reverse-engineering",
+      "observables-physique",
+      "effets-biologiques",
+      "dissimulation",
+      "combat-legislatif"
+    ],
+    "people": [
+      "luis-elizondo",
+      "christopher-mellon",
+      "david-fravor",
+      "ryan-graves",
+      "david-grusch",
+      "hal-puthoff",
+      "garry-nolan",
+      "jay-stratton",
+      "harry-reid"
+    ],
+    "incidents": [
+      "nimitz-tic-tac-2004",
+      "uss-roosevelt-2014",
+      "colares-1977",
+      "malmstrom-1967",
+      "roswell-1947",
+      "cash-landrum-1980",
+      "rendlesham-1980"
+    ],
+    "filename": "Imminent _ Inside the Pentagons Hunt for UFOs -- Lue Elizondo, Luis Elizondo.md",
+    "epub_path": "/docs/imminent-elizondo.epub"
+  },
+  {
+    "slug": "ovnis-enquete-declassifiee",
+    "title": "Ovnis : l'enquête déclassifiée",
+    "authors": [
+      "Sylvain Maisonneuve"
+    ],
+    "year": 2025,
+    "language": "fr",
+    "type": "book",
+    "period_start": 1947,
+    "period_end": 2025,
+    "themes": [
+      "dissimulation",
+      "combat-legislatif",
+      "whistleblowers",
+      "perspective-francaise",
+      "observables-physique"
+    ],
+    "people": [
+      "luis-elizondo",
+      "christopher-mellon",
+      "david-fravor",
+      "ryan-graves",
+      "david-grusch",
+      "garry-nolan",
+      "jay-stratton",
+      "harry-reid",
+      "jake-barber",
+      "karl-nell"
+    ],
+    "incidents": [
+      "nimitz-tic-tac-2004",
+      "uss-roosevelt-2014",
+      "malmstrom-1967",
+      "roswell-1947",
+      "washington-1952",
+      "phoenix-lights-1997"
+    ],
+    "filename": "Ovnis l'enquête déclassifiée -- Sylvain Maisonneuve -- 2025.md",
+    "epub_path": "/docs/ovnis-enquete-declassifiee.epub"
+  },
+  {
+    "slug": "mystery-wire-archives",
+    "title": "Les Archives Secrètes de Mystery Wire",
+    "authors": [
+      "George Knapp"
+    ],
+    "year": 2025,
+    "language": "fr",
+    "type": "report",
+    "period_start": 1947,
+    "period_end": 2025,
+    "themes": [
+      "dissimulation",
+      "aawsap-aatip",
+      "reverse-engineering",
+      "lien-nucleaire",
+      "combat-legislatif"
+    ],
+    "people": [
+      "george-knapp",
+      "harry-reid",
+      "hal-puthoff",
+      "luis-elizondo",
+      "david-grusch"
+    ],
+    "incidents": [
+      "roswell-1947",
+      "nimitz-tic-tac-2004",
+      "kecksburg-1965",
+      "washington-1952"
+    ],
+    "filename": "mystery_wire_documents_rapport.md",
+    "pdf_path": "/docs/mystery-wire-archives.pdf"
+  },
+  {
+    "slug": "age-of-disclosure",
+    "title": "The Age of Disclosure",
+    "authors": [
+      "Dan Farah"
+    ],
+    "year": 2025,
+    "language": "fr",
+    "type": "documentary",
+    "period_start": 1945,
+    "period_end": 2025,
+    "themes": [
+      "dissimulation",
+      "aawsap-aatip",
+      "whistleblowers",
+      "combat-legislatif",
+      "reverse-engineering",
+      "observables-physique",
+      "lien-nucleaire"
+    ],
+    "people": [
+      "luis-elizondo",
+      "jay-stratton",
+      "david-fravor",
+      "ryan-graves",
+      "david-grusch",
+      "hal-puthoff",
+      "christopher-mellon",
+      "garry-nolan",
+      "karl-nell"
+    ],
+    "incidents": [
+      "nimitz-tic-tac-2004",
+      "uss-roosevelt-2014",
+      "malmstrom-1967",
+      "roswell-1947",
+      "aguadilla",
+      "big-sur-1964",
+      "vandenberg-2003"
+    ],
+    "filename": "The.Age.Of.Disclosure.2025",
+    "source_analysis": "doc/video/The.Age.Of.Disclosure.2025 Analysis.md"
+  }
+]

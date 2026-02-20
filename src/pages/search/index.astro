@@ -1,0 +1,339 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+const docsPath = path.join(process.cwd(), 'content', 'docs-meta.json');
+const docs = JSON.parse(fs.readFileSync(docsPath, 'utf-8'));
+const peoplePath = path.join(process.cwd(), 'content', 'people.json');
+const people = JSON.parse(fs.readFileSync(peoplePath, 'utf-8'));
+const incidentsPath = path.join(process.cwd(), 'content', 'incidents.json');
+const incidents = JSON.parse(fs.readFileSync(incidentsPath, 'utf-8'));
+const themesPath = path.join(process.cwd(), 'content', 'themes.json');
+const themes = JSON.parse(fs.readFileSync(themesPath, 'utf-8'));
+const programsPath = path.join(process.cwd(), 'content', 'programs.json');
+const programs = JSON.parse(fs.readFileSync(programsPath, 'utf-8'));
+const dirdsPath = path.join(process.cwd(), 'content', 'dirds.json');
+const dirds = JSON.parse(fs.readFileSync(dirdsPath, 'utf-8'));
+const chaptersPath = path.join(process.cwd(), 'content', 'documentary-chapters.json');
+const chapters = JSON.parse(fs.readFileSync(chaptersPath, 'utf-8'));
+const videosPath = path.join(process.cwd(), 'content', 'videos.json');
+const videos = JSON.parse(fs.readFileSync(videosPath, 'utf-8'));
+
+const searchData = {
+  docs: docs.filter((d: { type: string }) => d.type !== 'documentary').map((d: { slug: string; title: string; authors: string[]; year: number; themes: string[] }) => ({
+    slug: d.slug,
+    title: d.title,
+    authors: d.authors.join(' '),
+    year: d.year,
+    themes: (d.themes || []).join(' '),
+    type: 'doc',
+  })),
+  people: people.map((p: { id: string; name: string; role: string; bio?: string }) => ({
+    id: p.id,
+    name: p.name,
+    role: p.role,
+    bio: p.bio || '',
+    type: 'person',
+  })),
+  incidents: incidents.map((i: { id: string; name: string; description: string; date?: string }) => ({
+    id: i.id,
+    name: i.name,
+    description: i.description,
+    date: i.date || '',
+    type: 'incident',
+  })),
+  themes: themes.map((t: { id: string; label: string; description: string }) => ({
+    id: t.id,
+    label: t.label,
+    description: t.description || '',
+    type: 'theme',
+  })),
+  programs: programs.map((p: { id: string; name: string; description: string; dates: string }) => ({
+    id: p.id,
+    name: p.name,
+    description: p.description,
+    dates: p.dates || '',
+    type: 'program',
+  })),
+  dirds: dirds.map((d: { id: number; title: string; author: string; affiliation: string }) => ({
+    id: d.id,
+    title: d.title,
+    author: d.author,
+    affiliation: d.affiliation || '',
+    type: 'dird',
+  })),
+  chapters: chapters.map((c: { id: number; title: string; description: string; key_quote?: string; timestamp_seconds?: number }) => ({
+    id: c.id,
+    title: c.title,
+    description: c.description || '',
+    key_quote: c.key_quote || '',
+    timestamp_seconds: c.timestamp_seconds || 0,
+    type: 'chapter',
+  })),
+  videos: videos.filter((v: { youtube_id: string | null }) => v.youtube_id).map((v: { id: string; title: string; description: string; event_date?: string }) => ({
+    id: v.id,
+    title: v.title,
+    description: v.description || '',
+    event_date: v.event_date || '',
+    type: 'video',
+  })),
+};
+---
+
+<BaseLayout title="Recherche" description="Recherche plein texte sur documents, personnes, incidents, thèmes, programmes, DIRD, chapitres documentaire et vidéos.">
+  <h1>Recherche</h1>
+  <p class="intro">Recherche dans les documents, personnes, incidents, thèmes, programmes, DIRD, chapitres du documentaire et vidéos.</p>
+
+  <div class="search-box">
+    <input type="search" id="search-input" placeholder="Ex. Elizondo, Nimitz, AATIP, Roswell…" autofocus autocomplete="off" />
+    <span id="search-status" class="search-status" aria-live="polite"></span>
+  </div>
+
+  <div id="search-results" class="search-results"></div>
+
+  <script type="module">
+    import Fuse from 'fuse.js';
+
+    const el = document.getElementById('search-data');
+    const searchData = el ? JSON.parse(el.textContent || '{}') : {};
+
+    const TYPE_LABELS = {
+      doc: 'Document',
+      person: 'Personne',
+      incident: 'Incident',
+      theme: 'Thème',
+      program: 'Programme',
+      dird: 'DIRD',
+      chapter: 'Documentaire',
+      video: 'Vidéo',
+    };
+
+    const items = [
+      ...(searchData.docs || []).map(d => ({ ...d, searchText: `${d.title} ${d.authors} ${d.themes || ''}` })),
+      ...(searchData.people || []).map(p => ({ ...p, searchText: `${p.name} ${p.role} ${p.bio || ''}` })),
+      ...(searchData.incidents || []).map(i => ({ ...i, searchText: `${i.name} ${i.description || ''} ${i.date || ''}` })),
+      ...(searchData.themes || []).map(t => ({ ...t, searchText: `${t.label} ${t.description || ''} ${t.id}` })),
+      ...(searchData.programs || []).map(p => ({ ...p, searchText: `${p.name} ${p.description || ''} ${p.dates || ''}` })),
+      ...(searchData.dirds || []).map(d => ({ ...d, searchText: `${d.title} ${d.author} ${d.affiliation || ''}` })),
+      ...(searchData.chapters || []).map(c => ({ ...c, searchText: `${c.title} ${c.description || ''} ${c.key_quote || ''}` })),
+      ...(searchData.videos || []).map(v => ({ ...v, searchText: `${v.title} ${v.description || ''} ${v.event_date || ''}` })),
+    ];
+
+    const fuse = new Fuse(items, {
+      keys: ['searchText', 'title', 'name', 'label', 'authors', 'role', 'description', 'author'],
+      threshold: 0.35,
+      ignoreLocation: true,
+      includeScore: true,
+    });
+
+    const input = document.getElementById('search-input');
+    const results = document.getElementById('search-results');
+    const status = document.getElementById('search-status');
+
+    function escapeHtml(s) {
+      if (!s) return '';
+      const div = document.createElement('div');
+      div.textContent = s;
+      return div.innerHTML;
+    }
+
+    function renderItem(item) {
+      const typeLabel = TYPE_LABELS[item.type] || item.type;
+      if (item.type === 'doc') {
+        return `<a href="/documents/${escapeHtml(item.slug)}/" class="result-item" data-type="doc">
+          <span class="result-type">${typeLabel}</span>
+          <strong>${escapeHtml(item.title)}</strong> — ${escapeHtml(item.authors)} (${item.year})
+        </a>`;
+      }
+      if (item.type === 'person') {
+        return `<a href="/people/${escapeHtml(item.id)}/" class="result-item" data-type="person">
+          <span class="result-type">${typeLabel}</span>
+          <strong>${escapeHtml(item.name)}</strong> — ${escapeHtml(item.role)}
+        </a>`;
+      }
+      if (item.type === 'incident') {
+        const desc = String(item.description || '').slice(0, 100);
+        return `<a href="/incidents/#${escapeHtml(item.id)}" class="result-item" data-type="incident">
+          <span class="result-type">${typeLabel}</span>
+          <strong>${escapeHtml(item.name)}</strong> — ${escapeHtml(desc)}${desc.length >= 100 ? '…' : ''}
+        </a>`;
+      }
+      if (item.type === 'theme') {
+        return `<a href="/themes/" class="result-item" data-type="theme">
+          <span class="result-type">${typeLabel}</span>
+          <strong>${escapeHtml(item.label)}</strong> — ${escapeHtml(String(item.description || '').slice(0, 80))}…
+        </a>`;
+      }
+      if (item.type === 'program') {
+        return `<a href="/programs/#${escapeHtml(item.id)}" class="result-item" data-type="program">
+          <span class="result-type">${typeLabel}</span>
+          <strong>${escapeHtml(item.name)}</strong> (${escapeHtml(item.dates || '')}) — ${escapeHtml(String(item.description || '').slice(0, 80))}…
+        </a>`;
+      }
+      if (item.type === 'dird') {
+        return `<a href="/dirds/${item.id}/" class="result-item" data-type="dird">
+          <span class="result-type">${typeLabel}</span>
+          <strong>DIRD ${item.id}</strong> — ${escapeHtml(item.title)} (${escapeHtml(item.author)})
+        </a>`;
+      }
+      if (item.type === 'chapter') {
+        const ts = item.timestamp_seconds || 0;
+        return `<a href="/documentary/#t=${ts}" class="result-item" data-type="chapter">
+          <span class="result-type">${typeLabel}</span>
+          <strong>Ch. ${item.id}</strong> — ${escapeHtml(item.title)}
+        </a>`;
+      }
+      if (item.type === 'video') {
+        return `<a href="/videos/#${escapeHtml(item.id)}" class="result-item" data-type="video">
+          <span class="result-type">${typeLabel}</span>
+          <strong>${escapeHtml(item.title)}</strong> — ${escapeHtml(item.event_date || '')}
+        </a>`;
+      }
+      return '';
+    }
+
+    function runSearch() {
+      const q = input.value.trim();
+      if (!q) {
+        results.innerHTML = '';
+        status.textContent = '';
+        return;
+      }
+
+      const matches = fuse.search(q).slice(0, 30);
+      const byType = {};
+      matches.forEach(m => {
+        const t = m.item.type;
+        if (!byType[t]) byType[t] = [];
+        byType[t].push(m);
+      });
+
+      const order = ['person', 'incident', 'doc', 'chapter', 'video', 'dird', 'program', 'theme'];
+      let html = '';
+      order.forEach(type => {
+        const list = byType[type];
+        if (!list || list.length === 0) return;
+        const label = TYPE_LABELS[type] || type;
+        html += `<div class="result-group"><h3 class="result-group-title">${label}</h3>`;
+        html += list.map(m => renderItem(m.item)).join('');
+        html += '</div>';
+      });
+
+      results.innerHTML = html || '<p class="no-results">Aucun résultat pour « ' + escapeHtml(q) + ' »</p>';
+      status.textContent = matches.length > 0 ? `${matches.length} résultat${matches.length > 1 ? 's' : ''}` : 'Aucun résultat';
+    }
+
+    let debounceTimer;
+    if (input && results) {
+      input.addEventListener('input', () => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(runSearch, 200);
+      });
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          input.value = '';
+          input.blur();
+          results.innerHTML = '';
+          status.textContent = '';
+        }
+      });
+    }
+  </script>
+  <script type="application/json" id="search-data">
+    {JSON.stringify(searchData)}
+  </script>
+</BaseLayout>
+
+<style>
+  .intro {
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .search-box {
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+
+  .search-box input {
+    width: 100%;
+    max-width: 560px;
+    padding: 0.875rem 1rem;
+    font-size: 1rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+  }
+
+  .search-box input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(0, 212, 170, 0.15);
+  }
+
+  .search-box input::placeholder {
+    color: var(--text-muted);
+  }
+
+  .search-status {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+  }
+
+  .search-results {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .result-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .result-group-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+    margin: 0 0 0.5rem;
+  }
+
+  .result-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    transition: border-color 0.2s;
+  }
+
+  .result-item:hover {
+    border-color: var(--accent);
+    text-decoration: none;
+  }
+
+  .result-type {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+  }
+
+  .result-item strong {
+    font-weight: 600;
+  }
+
+  .no-results {
+    color: var(--text-muted);
+    font-size: 1rem;
+    padding: 2rem;
+    text-align: center;
+  }
+</style>

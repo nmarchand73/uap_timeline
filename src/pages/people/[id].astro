@@ -1,0 +1,84 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+export const getStaticPaths = async () => {
+  const peoplePath = path.join(process.cwd(), 'content', 'people.json');
+  const people = JSON.parse(fs.readFileSync(peoplePath, 'utf-8'));
+  return people.map((p: { id: string }) => ({ params: { id: p.id } }));
+};
+
+const { id } = Astro.params;
+const peoplePath = path.join(process.cwd(), 'content', 'people.json');
+const people = JSON.parse(fs.readFileSync(peoplePath, 'utf-8'));
+const person = people.find((p: { id: string }) => p.id === id);
+
+if (!person) {
+  return Astro.redirect('/people/');
+}
+
+const docsPath = path.join(process.cwd(), 'content', 'docs-meta.json');
+const docs = JSON.parse(fs.readFileSync(docsPath, 'utf-8'));
+---
+
+<BaseLayout title={person.name} description={person.role}>
+  <article class="person-page">
+    <h1>{person.name}</h1>
+    <p class="role">{person.role}</p>
+    {person.bio && <p class="bio">{person.bio}</p>}
+
+    <section>
+      <h2>Documents</h2>
+      <ul>
+        {person.docs_refs?.map((slug: string) => {
+          const doc = docs.find((d: { slug: string }) => d.slug === slug);
+          return doc ? <li><a href={`/documents/${doc.slug}/`}>{doc.title}</a></li> : null;
+        })}
+      </ul>
+    </section>
+
+    <section>
+      <h2>Incidents</h2>
+      <ul>
+        {person.incidents_refs?.map((incId: string) => (
+          <li><a href={`/incidents/#${incId}`}>{incId.replace(/-/g, ' ')}</a></li>
+        ))}
+      </ul>
+    </section>
+
+    <section>
+      <h2>Programmes</h2>
+      <ul>
+        {person.programs_refs?.map((progId: string) => (
+          <li><a href={`/programs/#${progId}`}>{progId.replace(/-/g, ' ')}</a></li>
+        ))}
+      </ul>
+    </section>
+  </article>
+</BaseLayout>
+
+<style>
+  .role {
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+  }
+
+  .bio {
+    margin-bottom: 2rem;
+  }
+
+  section {
+    margin-bottom: 2rem;
+  }
+
+  section h2 {
+    font-size: 1.125rem;
+    margin-bottom: 0.5rem;
+  }
+
+  section ul {
+    margin: 0;
+    padding-left: 1.25rem;
+  }
+</style>

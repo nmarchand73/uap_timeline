@@ -1,0 +1,261 @@
+[
+  {
+    "id": 1,
+    "title": "Metallic Glasses for Aerospace Applications",
+    "author": "Dr. T. Hufnagel",
+    "affiliation": "Johns Hopkins University",
+    "url": "/dirds/DIRD_01_Metallic_Glasses_for_Aerospace_Applications.pdf"
+  },
+  {
+    "id": 2,
+    "title": "Aerospace Applications of Programmable Matter",
+    "author": "Dr. W. McCarthy",
+    "affiliation": "Programmable Matter Corporation",
+    "url": "/dirds/DIRD_02-DIRD_Aerospace_Applications_of_Programmable_Matter.pdf"
+  },
+  {
+    "id": 3,
+    "title": "Pulsed High-Power Microwave Source Technology",
+    "author": "Dr. James Wells",
+    "affiliation": "JW Enterprises",
+    "url": "/dirds/DIRD_03-DIRD_Pulsed_High-Power_Microwave_Source_Technology.pdf"
+  },
+  {
+    "id": 4,
+    "title": "Biomaterials",
+    "author": "Dr. Bruce Towe",
+    "affiliation": "University of Arizona",
+    "url": "/dirds/DIRD_04_DIRD_Biomaterials.pdf"
+  },
+  {
+    "id": 5,
+    "title": "Materials for Advanced Aerospace Platforms",
+    "author": "Dr. J. Williams",
+    "affiliation": "Ohio State University",
+    "url": "/dirds/DIRD_05_Materials_for_Advanced_Aerospace_Platforms.pdf"
+  },
+  {
+    "id": 6,
+    "title": "Space Access: Where We've Been and Where We Could Go",
+    "author": "Dr. P. Czysz",
+    "affiliation": "HyperTech",
+    "url": "/dirds/DIRD_06-DIRD_Space_Access-Where_Weve_Been_and_Where_We_Could_Go.pdf"
+  },
+  {
+    "id": 7,
+    "title": "Invisibility Cloaking: Theory and Experiments",
+    "author": "Dr. Ulf Leonhardt",
+    "affiliation": "University of St Andrews",
+    "url": "/dirds/DIRD_07-DIRD_Invisibility_Cloaking-Theory_and_Experiments.pdf"
+  },
+  {
+    "id": 8,
+    "title": "Positron Aerospace Propulsion",
+    "author": "Dr. Gerald Smith",
+    "affiliation": "Positronics Research",
+    "url": "/dirds/DIRD_08-DIRD_Positron_Aerospace_Propulsion.pdf"
+  },
+  {
+    "id": 9,
+    "title": "Inertial Electrostatic Confinement Fusion",
+    "author": "Dr. George Miley",
+    "affiliation": "University of Illinois",
+    "url": "/dirds/DIRD_09-DIRD_Inertial_Electrostatic_Confinement_Fusion.pdf"
+  },
+  {
+    "id": 10,
+    "title": "Metallic Spintronics",
+    "author": "Dr. M. Tsoi",
+    "affiliation": "University of Texas",
+    "url": "/dirds/DIRD_10_Metallic_Spintronics.pdf"
+  },
+  {
+    "id": 11,
+    "title": "Advanced Nuclear Propulsion for Manned Deep Space Missions",
+    "author": "Dr. F. Winterberg",
+    "affiliation": "University of Nevada",
+    "url": "/dirds/DIRD_11-DIRD_Advanced_Nuclear_Propulsion_for_Manned_Deep_Space_Missions.pdf"
+  },
+  {
+    "id": 12,
+    "title": "Technological Approaches to Controlling External Devices in the Absence of Limb-Operated Interfaces",
+    "author": "Dr. R. Genik",
+    "affiliation": "Wayne State University",
+    "url": "/dirds/DIRD_12-DIRD_Technological_Approaches_to_Controlling_External_Devices.pdf"
+  },
+  {
+    "id": 13,
+    "title": "Warp Drive, Dark Energy and the Manipulation of Extra Dimensions",
+    "author": "Dr. R. Obousy",
+    "affiliation": "Obousy Consultants",
+    "url": "/dirds/DIRD_13-DIRD_Warp_Drive_Dark_energy_and_the_Manipulation_of_Extra_Dimensions.pdf"
+  },
+  {
+    "id": 14,
+    "title": "The Role of Superconductors in Gravity Research",
+    "author": "Dr. George Hathaway",
+    "affiliation": "Hathaway Consulting",
+    "url": "/dirds/DIRD_14-DIRD_The_Role_of_Superconductors_in_Gravity_Research.pdf"
+  },
+  {
+    "id": 15,
+    "title": "Advanced Space Propulsion Based on Vacuum (Spacetime Metric) Engineering",
+    "author": "Dr. Hal Puthoff",
+    "affiliation": "EarthTech International",
+    "url": "/dirds/DIRD_15-DIRD_Advanced_Space_Propulsion_Based_on_Vacuum_Spacetime_Metric_Engineer.pdf"
+  },
+  {
+    "id": 16,
+    "title": "The Space Communication Implications of Quantum Entanglement and Nonlocality",
+    "author": "Dr. J. Cramer",
+    "affiliation": "University of Washington",
+    "url": "/dirds/DIRD_16-DIRD_The_Space_Communication_Implications_of_Quantum_Entanglement_and_Nonlocality.pdf"
+  },
+  {
+    "id": 17,
+    "title": "Maverick Inventor Versus Corporate Inventor: Where Will the Next Major Innovations Arise",
+    "author": "Dr. George Hathaway",
+    "affiliation": "Hathaway Consulting",
+    "url": "/dirds/DIRD_17-DIRD_Maverick_Inventor_Versus_Corporate_Inventor-Where_Will_the_Next_major_Innovations_Arise.pdf"
+  },
+  {
+    "id": 18,
+    "title": "Traversable Wormholes, Stargates and Negative Energy",
+    "author": "Dr. Eric Davis",
+    "affiliation": "EarthTech International",
+    "url": "/dirds/DIRD_18-DIRD_Traversible_Wormholes_Stargates_and_Negative_Energy.pdf"
+  },
+  {
+    "id": 19,
+    "title": "Antigravity for Aerospace Applications",
+    "author": "Dr. Eric Davis",
+    "affiliation": "EarthTech International",
+    "url": "/dirds/DIRD_19-DIRD_Antigravity_for_Aerospace_Applications.pdf"
+  },
+  {
+    "id": 20,
+    "title": "Biosensors and BioMEMS: A Survey of the Present Field",
+    "author": "Dr. Bruce Towe",
+    "affiliation": "University of Arizona",
+    "url": "/dirds/DIRD_20-DIRD_Biosensors_and_BioMEMS-A_Survey_of_the_Present_Field.pdf"
+  },
+  {
+    "id": 21,
+    "title": "High-Frequency Gravitational Wave Communications",
+    "author": "Dr. Robert Baker",
+    "affiliation": "GravWave",
+    "url": "/dirds/DIRD_21-DIRD_High-Frequency_Gravitational_Wave_Communications.pdf"
+  },
+  {
+    "id": 22,
+    "title": "Metamaterials for Aerospace Applications",
+    "author": "Dr. G. Shvets",
+    "affiliation": "University of Texas-Austin",
+    "url": "/dirds/DIRD_22_Metamaterials_for_Aerospace_Applications.pdf"
+  },
+  {
+    "id": 23,
+    "title": "State of the Art and Evolution of High-Energy Laser Weapons",
+    "author": "J. Albertine",
+    "affiliation": "Directed Technologies",
+    "url": "/dirds/DIRD_23-DIRD_State_of_the_Art_and_Evolution_of_High-Energy_Laser_Weapons.pdf"
+  },
+  {
+    "id": 24,
+    "title": "Concepts for Extracting Energy from the Quantum Vacuum",
+    "author": "Dr. Eric Davis",
+    "affiliation": "EarthTech International",
+    "url": "/dirds/DIRD_24-DIRD_Concepts_for_Extracting_Energy_from_the_Quantum_Vacuum.pdf"
+  },
+  {
+    "id": 25,
+    "title": "An Introduction to the Statistical Drake Equation",
+    "author": "Dr. Claudio Maccone",
+    "affiliation": "International Academy of Astronautics",
+    "url": "/dirds/DIRD_25-DIRD_An_Introduction_to_the_Statistical_Drake_Equation.pdf"
+  },
+  {
+    "id": 26,
+    "title": "Anomalous Acute and Subacute Field Effects on Human Biological Tissues",
+    "author": "Dr. Christopher Green",
+    "affiliation": "Wayne State University",
+    "url": "/dirds/DIRD_26-DIRD_Anomalous_Acute_and_Subacute_Field_Effects_on_Human_Biological_Tissues.pdf"
+  },
+  {
+    "id": 27,
+    "title": "Laser Lightcraft Nanosatellites",
+    "author": "Dr. E. Davis",
+    "affiliation": "EarthTech International",
+    "url": "/dirds/DIRD_27-DIRD_Laser_Lightcraft_Nanosatellites.pdf"
+  },
+  {
+    "id": 28,
+    "title": "Cockpits in the Era of Breakthrough Flight",
+    "author": "Dr. G. Millis",
+    "affiliation": "Tau Zero",
+    "url": "/dirds/DIRD_28-DIRD_Cockpits_in_the_Era_of_Breakthrough_Flight.pdf"
+  },
+  {
+    "id": 29,
+    "title": "Negative Mass Propulsion",
+    "author": "Dr. F. Winterberg",
+    "affiliation": "University of Nevada",
+    "url": "/dirds/DIRD_29-DIRD_Negative_mass_Propulsion.pdf"
+  },
+  {
+    "id": 30,
+    "title": "Aneutronic Fusion Propulsion",
+    "author": "Dr. V. Teofilo",
+    "affiliation": "Lockheed Martin",
+    "url": "/dirds/DIRD_30-DIRD_Aneutronic_Fusion_Propulsion.pdf"
+  },
+  {
+    "id": 31,
+    "title": "Detection and High Resolution Tracking of Vehicles at Hypersonic Velocities",
+    "author": "Dr. W. Culbreth",
+    "affiliation": "University of Nevada",
+    "url": "/dirds/DIRD_31-DIRD_Detection_and_High_Resolution_Tracking_of_Vehicles_at_Hypersonic_Velocities.pdf"
+  },
+  {
+    "id": 32,
+    "title": "Ultracapacitors as Energy and Power Storage Devices",
+    "author": "Dr. J. Golightly",
+    "affiliation": "Lockheed Martin",
+    "url": "/dirds/DIRD_32-DIRD_Ultracapacitators_as_Energy_and_Power_Storage_Devices.pdf"
+  },
+  {
+    "id": 33,
+    "title": "MHD Air Breathing Propulsion and Power for Aerospace Applications",
+    "author": "Dr. S. Macheret",
+    "affiliation": "Lockheed Martin",
+    "url": "/dirds/DIRD_33-DIRD_MHD_Air_Breathing_Propulsion_and_Power_for_Aerospace_Applications.pdf"
+  },
+  {
+    "id": 34,
+    "title": "Cognitive Limits on Simultaneous Control of Multiple Unmanned Spacecraft",
+    "author": "Dr. R. Genik",
+    "affiliation": "Wayne State University",
+    "url": "/dirds/DIRD_34-DIRD_Cognitive_Limits_on_Simultaneous_Control_of_Multiple_Unmanned_Spacecraft.pdf"
+  },
+  {
+    "id": 35,
+    "title": "Quantum Computing and Utilizing Organic Molecules in Automation Technology",
+    "author": "Dr. R. Genik",
+    "affiliation": "Wayne State University",
+    "url": "/dirds/DIRD_35-DIRD_Quantum_Computing_and_Utilizing_Organic_Molecules_in_Automation_Technology.pdf"
+  },
+  {
+    "id": 36,
+    "title": "Quantum Tomography of Negative Energy States in the Vacuum",
+    "author": "Dr. E. Davis",
+    "affiliation": "EarthTech International",
+    "url": "/dirds/DIRD_36-DIRD_Quantum_Tomography_of_Negative_Energy_States_in_the_Vacuum.pdf"
+  },
+  {
+    "id": 37,
+    "title": "Aneutronic Fusion Propulsion II",
+    "author": "Dr. W. Culbreth",
+    "affiliation": "University of Nevada",
+    "url": "/dirds/DIRD_37-DIRD_Aneutronic_Fusion_Propulsion_II.pdf"
+  }
+]

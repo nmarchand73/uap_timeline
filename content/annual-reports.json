@@ -1,0 +1,52 @@
+[
+  {
+    "year": "2021",
+    "title": "Preliminary Assessment: Unidentified Aerial Phenomena",
+    "program": "uaptf",
+    "url": "https://www.dni.gov/files/ODNI/documents/assessments/Preliminary-Assessment-UAP-20210625.pdf",
+    "date": "2021-06-25",
+    "summary": "Premier rapport ODNI. 144 cas UAP (2004-2021). UAPTF. Pas d'attribution étrangère confirmée."
+  },
+  {
+    "year": "2022",
+    "title": "Annual Report on Unidentified Aerial Phenomena",
+    "program": "uaptf",
+    "url": "https://www.dni.gov/files/ODNI/documents/assessments/Unclassified-2022-Annual-Report-UAP.pdf",
+    "date": "2022",
+    "summary": "510 rapports UAP au total. Création de l'AARO. 144 anciens, 247 nouveaux, 119 tardifs."
+  },
+  {
+    "year": "2023",
+    "title": "FY 2023 Consolidated Annual Report on Unidentified Anomalous Phenomena",
+    "program": "aaro",
+    "url": "https://www.dni.gov/files/ODNI/documents/assessments/FY2023-Consolidated-Annual-Report-UAP-Oct2023.pdf",
+    "date": "2023-10",
+    "summary": "Rapport ODNI/DoD. Exigé par le NDAA 2022-2023. Version non classifiée."
+  },
+  {
+    "year": "2024",
+    "title": "FY 2024 Consolidated Annual Report on Unidentified Anomalous Phenomena",
+    "program": "aaro",
+    "url": "https://www.dni.gov/files/ODNI/documents/assessments/DOD-AARO-Consolidated-Annual-Report-on-UAP-Nov2024.pdf",
+    "date": "2024-11",
+    "summary": "757 rapports UAP (mai 2023 - juin 2024). 1 600+ cas examinés. 292 résolus (ballons, UAS, satellites)."
+  },
+  {
+    "year": "2025",
+    "title": "AARO Mission Brief 2025",
+    "program": "aaro",
+    "url": "https://www.aaro.mil/Portals/136/PDFs/AARO_Mission_Brief_2025.pdf",
+    "date": "2025",
+    "summary": "Présentation mission, organisation, conclusions. Pas de preuve extraterrestre. Peu de cas avec signatures anormales.",
+    "type": "mission_brief"
+  },
+  {
+    "year": "2025",
+    "title": "AARO Declassification Info Paper 2025",
+    "program": "aaro",
+    "url": "https://www.aaro.mil/Portals/136/PDFs/Information%20Papers/AARO_Declassification_Info_Paper_2025.pdf",
+    "date": "2025",
+    "summary": "Document sur la déclassification des informations UAP.",
+    "type": "info_paper"
+  }
+]

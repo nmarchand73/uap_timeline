@@ -1,0 +1,72 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+const peoplePath = path.join(process.cwd(), 'content', 'people.json');
+const people = JSON.parse(fs.readFileSync(peoplePath, 'utf-8'));
+---
+
+<BaseLayout title="Personnes clés" description="~25 personnes clés avec documents, incidents et programmes.">
+  <h1>Personnes clés</h1>
+  <p class="intro">Fiches avec rôle, documents, incidents et programmes.</p>
+
+  <div class="people-grid">
+    {people.map((p: { id: string; name: string; role: string; docs_refs: string[]; incidents_refs: string[] }) => (
+      <article class="person-card" id={p.id}>
+        <h3>{p.name}</h3>
+        <p class="role">{p.role}</p>
+        <div class="refs">
+          {p.docs_refs?.length > 0 && (
+            <p><strong>Documents:</strong> {p.docs_refs.length}</p>
+          )}
+          {p.incidents_refs?.length > 0 && (
+            <p><strong>Incidents:</strong> {p.incidents_refs.length}</p>
+          )}
+        </div>
+        <a href={`/people/${p.id}/`} class="link">Voir fiche →</a>
+      </article>
+    ))}
+  </div>
+</BaseLayout>
+
+<style>
+  .intro {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+  }
+
+  .people-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .person-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+  }
+
+  .person-card h3 {
+    margin-bottom: 0.25rem;
+  }
+
+  .role {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .refs p {
+    font-size: 0.8rem;
+    margin: 0.25rem 0;
+  }
+
+  .link {
+    display: inline-block;
+    margin-top: 0.75rem;
+    font-size: 0.875rem;
+  }
+</style>

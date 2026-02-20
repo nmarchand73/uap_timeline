@@ -1,0 +1,148 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+const programsPath = path.join(process.cwd(), 'content', 'programs.json');
+const programs = JSON.parse(fs.readFileSync(programsPath, 'utf-8'));
+---
+
+<BaseLayout title="Programmes" description="~15 programmes gouvernementaux et scientifiques.">
+  <h1>Programmes</h1>
+  <p class="intro">AAWSAP, AATIP, Blue Book, GEIPAN, Legacy, DIRDs...</p>
+
+  <div class="programs-list">
+    {programs.map((prog: { id: string; name: string; dates: string; description: string; details?: string; people: string[]; url?: string; annual_reports?: { year: string; title: string; url: string }[]; publications?: { title: string; url: string }[] }) => (
+      <article class="program-card" id={prog.id}>
+        <h3>{prog.name}</h3>
+        <p class="dates">{prog.dates}</p>
+        <p class="description">{prog.description}</p>
+        {prog.details && (
+          <p class="details">{prog.details}</p>
+        )}
+        {prog.people?.length > 0 && (
+          <p class="people">Personnes: {prog.people.slice(0, 5).join(', ')}</p>
+        )}
+        {prog.annual_reports?.length > 0 && (
+          <div class="annual-reports">
+            <span class="reports-label">Rapports annuels :</span>
+            <ul class="reports-list">
+              {prog.annual_reports.map((r: { year: string; title: string; url: string }) => (
+                <li><a href={r.url} target="_blank" rel="noopener noreferrer">{r.year} — {r.title}</a></li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {prog.publications?.length > 0 && (
+          <div class="publications">
+            <span class="reports-label">Publications / archives :</span>
+            <ul class="reports-list">
+              {prog.publications.map((p: { title: string; url: string }) => (
+                <li><a href={p.url} target="_blank" rel="noopener noreferrer">{p.title}</a></li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {prog.url && (
+          <a href={prog.url} target="_blank" rel="noopener noreferrer" class="prog-link">Site officiel →</a>
+        )}
+      </article>
+    ))}
+  </div>
+</BaseLayout>
+
+<style>
+  .intro {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+  }
+
+  .programs-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .program-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+  }
+
+  .program-card h3 {
+    margin-bottom: 0.25rem;
+  }
+
+  .dates {
+    font-size: 0.875rem;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .description {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .details {
+    font-size: 0.85rem;
+    color: var(--text);
+    line-height: 1.55;
+    margin-bottom: 0.75rem;
+    padding-left: 1rem;
+    border-left: 3px solid var(--border);
+  }
+
+  .people {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .prog-link {
+    display: inline-block;
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .prog-link:hover {
+    text-decoration: underline;
+  }
+
+  .annual-reports,
+  .publications {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .reports-label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+    margin-bottom: 0.35rem;
+  }
+
+  .reports-list {
+    margin: 0;
+    padding-left: 1.25rem;
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+
+  .reports-list a {
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .reports-list a:hover {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+</style>

@@ -1,0 +1,30 @@
+{
+  "name": "ufo-website",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "srt-to-vtt": "node scripts/srt-to-vtt.js",
+    "prepare-video": "node scripts/prepare-video.js",
+    "copy-docs": "node scripts/copy-docs-to-public.js",
+    "download-dirds": "node scripts/download-dirds.js",
+    "generate-dird-analyses": "node scripts/generate-dird-analyses.js",
+    "subtitles-index": "node scripts/srt-to-search-index.js"
+  },
+  "dependencies": {
+    "astro": "^5.17.3",
+    "epubjs": "^0.3.93",
+    "fuse.js": "^7.0.0",
+    "marked": "^17.0.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.6",
+    "adm-zip": "^0.5.16",
+    "dotenv": "^17.3.1",
+    "pdf-parse": "^2.4.5",
+    "typescript": "^5.6.0"
+  }
+}

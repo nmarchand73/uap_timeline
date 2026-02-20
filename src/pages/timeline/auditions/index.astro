@@ -1,0 +1,518 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+const videosPath = path.join(process.cwd(), 'content', 'videos.json');
+const hearingsPath = path.join(process.cwd(), 'content', 'hearings.json');
+const hearingsFrPath = path.join(process.cwd(), 'content', 'hearings-fr.json');
+const allVideos = JSON.parse(fs.readFileSync(videosPath, 'utf-8'));
+const hearingsData = JSON.parse(fs.readFileSync(hearingsPath, 'utf-8'));
+const hearingsFrData = JSON.parse(fs.readFileSync(hearingsFrPath, 'utf-8'));
+const hearingsMap = Object.fromEntries(hearingsData.map((h: { video_id: string }) => [h.video_id, h]));
+const hearingsFr = hearingsFrData.sort((a: { event_date: string }, b: { event_date: string }) =>
+  a.event_date.localeCompare(b.event_date, undefined, { numeric: true })
+);
+
+const HEARING_IDS = ['V10', 'V11', 'V5', 'V8', 'V9', 'V12'];
+const hearings = allVideos
+  .filter((v: { id: string; youtube_id: string | null }) => HEARING_IDS.includes(v.id) && v.youtube_id)
+  .sort((a: { event_date?: string }, b: { event_date?: string }) => {
+    const da = parseSortKey(a.event_date);
+    const db = parseSortKey(b.event_date);
+    return da.localeCompare(db, undefined, { numeric: true });
+  })
+  .map((v: { id: string }) => ({ ...v, details: hearingsMap[v.id] }));
+
+function parseSortKey(d?: string | null): string {
+  if (!d) return '9999-99-99';
+  const m = d.match(/^(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?/);
+  if (m) return `${m[1]}-${m[2] || '01'}-${m[3] || '01'}`;
+  const y = d.match(/(\d{4})/);
+  return y ? `${y[1]}-01-01` : '9999-99-99';
+}
+
+function formatDate(d?: string | null): string {
+  if (!d) return '';
+  const m = d.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (m) return `${m[3]}/${m[2]}/${m[1]}`;
+  const y = d.match(/(\d{4})/);
+  return y ? y[1] : d;
+}
+
+const yearMin = 2022;
+const yearMax = 2026;
+---
+
+<BaseLayout title="Auditions et initiatives parlementaires" description="Timeline des auditions UAP au Congrès et au Sénat américain (2022-2025) et équivalents français.">
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="/timeline/">Timeline</a>
+    <span aria-hidden="true">/</span>
+    <span>Auditions et initiatives</span>
+  </nav>
+
+  <h1>Auditions et initiatives parlementaires</h1>
+  <p class="intro">Chronologie des auditions publiques UAP au Congrès et au Sénat américain (2022-2025), et équivalents français.</p>
+
+  <section class="hearings-axis">
+    <h2>Axe 2022-2026</h2>
+    <div class="axis-bar">
+      {hearings.map((h: { id: string; event_date?: string | null; title: string }) => {
+        const d = parseSortKey(h.event_date);
+        const year = parseInt(d.slice(0, 4), 10);
+        const month = parseInt(d.slice(5, 7), 10) || 6;
+        const pos = ((year - yearMin) * 12 + month) / ((yearMax - yearMin) * 12) * 100;
+        return (
+          <a
+            href={`#hearing-${h.id}`}
+            class="axis-dot"
+            style={`left: ${Math.min(99, Math.max(0, pos))}%`}
+            title={`${formatDate(h.event_date)} — ${h.title}`}
+            aria-label={h.title}
+          >
+            <span class="axis-dot-inner">⚖️</span>
+          </a>
+        );
+      })}
+    </div>
+    <div class="year-axis">
+      <span>2022</span>
+      <span>2023</span>
+      <span>2024</span>
+      <span>2025</span>
+      <span>2026</span>
+    </div>
+  </section>
+
+  <div class="hearings-timeline">
+    <div class="timeline-rail"></div>
+    {hearings.map((h: { id: string; title: string; description: string; event_date?: string | null; youtube_id: string; youtube_timestamp?: number; details?: { committee: string; chair: string | null; witnesses: string[]; key_points: string[]; docs_url?: string; cspan_url?: string | null; cspan_title?: string | null; cspan_duration?: string | null; defense_gov_url?: string } }) => (
+      <article class="hearing-card" id={`hearing-${h.id}`}>
+        <div class="hearing-marker">
+          <span class="hearing-date">{formatDate(h.event_date)}</span>
+        </div>
+        <div class="hearing-content">
+          <h3>{h.title}</h3>
+          <p class="hearing-desc">{h.description}</p>
+          {h.details && (
+            <div class="hearing-details">
+              <div class="detail-block">
+                <span class="detail-label">Comité</span>
+                <span class="detail-value">{h.details.committee}</span>
+              </div>
+              {h.details.chair && (
+                <div class="detail-block">
+                  <span class="detail-label">Président</span>
+                  <span class="detail-value">{h.details.chair}</span>
+                </div>
+              )}
+              <div class="detail-block">
+                <span class="detail-label">Témoins</span>
+                <ul class="detail-list">
+                  {h.details.witnesses.map((w: string) => <li>{w}</li>)}
+                </ul>
+              </div>
+              <div class="detail-block">
+                <span class="detail-label">Points clés</span>
+                <ul class="detail-list key-points">
+                  {h.details.key_points.map((p: string) => <li>{p}</li>)}
+                </ul>
+              </div>
+            </div>
+          )}
+          <div class="hearing-video">
+            <a
+              href={`https://www.youtube.com/watch?v=${h.youtube_id}${h.youtube_timestamp ? `&t=${h.youtube_timestamp}` : ''}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-watch"
+            >
+              ▶ Regarder sur YouTube
+            </a>
+            {h.details?.cspan_url && (
+              <a href={h.details.cspan_url} target="_blank" rel="noopener noreferrer" class="btn-cspan" title={h.details.cspan_title ?? 'Vidéo C-SPAN'}>
+                📺 C-SPAN{h.details.cspan_duration ? ` (${h.details.cspan_duration})` : ''}
+              </a>
+            )}
+            {h.details?.defense_gov_url && !h.details?.cspan_url && (
+              <a href={h.details.defense_gov_url} target="_blank" rel="noopener noreferrer" class="btn-cspan" title="Vidéo officielle DoD">
+                🎬 Defense.gov
+              </a>
+            )}
+            {h.details?.docs_url && (
+              <a href={h.details.docs_url} target="_blank" rel="noopener noreferrer" class="btn-docs">
+                📄 Documents officiels (PDF)
+              </a>
+            )}
+            <a href={`/videos/#${h.id}`} class="btn-inline">Voir dans la vidéothèque</a>
+          </div>
+        </div>
+      </article>
+    ))}
+  </div>
+
+  <section class="hearings-fr">
+    <h2>🇫🇷 France</h2>
+    <p class="section-desc">La France n'a pas d'auditions parlementaires UAP comparables au Congrès américain. Initiatives citoyennes et réponses gouvernementales :</p>
+    <div class="hearings-timeline fr-timeline">
+      <div class="timeline-rail"></div>
+      {hearingsFr.map((f: { id: string; event_date: string; title: string; description: string; institution: string; key_points: string[]; url: string; geipan_url?: string; geipan_links?: { label: string; url: string }[]; signatures_required?: number }) => (
+        <article class="hearing-card fr-card" id={`fr-${f.id}`}>
+          <div class="hearing-marker">
+            <span class="hearing-date">{formatDate(f.event_date)}</span>
+          </div>
+          <div class="hearing-content">
+            <h3>{f.title}</h3>
+            <p class="hearing-desc">{f.description}</p>
+            <div class="hearing-details">
+              <div class="detail-block">
+                <span class="detail-label">Institution</span>
+                <span class="detail-value">{f.institution}</span>
+              </div>
+              <div class="detail-block">
+                <span class="detail-label">Points clés</span>
+                <ul class="detail-list key-points">
+                  {f.key_points.map((p: string) => <li>{p}</li>)}
+                </ul>
+              </div>
+            </div>
+            <div class="hearing-video">
+              <a href={f.url} target="_blank" rel="noopener noreferrer" class="btn-watch">
+                Voir la source
+              </a>
+              {f.geipan_links?.length ? (
+                <div class="geipan-links">
+                  {f.geipan_links.map((l: { label: string; url: string }) => (
+                    <a href={l.url} target="_blank" rel="noopener noreferrer" class="btn-docs">{l.label}</a>
+                  ))}
+                </div>
+              ) : f.geipan_url ? (
+                <a href={f.geipan_url} target="_blank" rel="noopener noreferrer" class="btn-docs">GEIPAN (CNES)</a>
+              ) : null}
+              {f.signatures_required && (
+                <span class="signatures-info">100 000 signatures pour examen</span>
+              )}
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <p class="back-link"><a href="/timeline/">← Retour à la timeline</a></p>
+</BaseLayout>
+
+<style>
+  .breadcrumb {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+  }
+
+  .breadcrumb a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .breadcrumb a:hover {
+    text-decoration: underline;
+  }
+
+  .intro {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+  }
+
+  .hearings-axis {
+    margin-bottom: 3rem;
+    padding: 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+
+  .hearings-axis h2 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .axis-bar {
+    position: relative;
+    height: 2.5rem;
+    background: var(--bg-elevated);
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+  }
+
+  .axis-dot {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: var(--bg-card);
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    z-index: 2;
+    transition: transform 0.15s, box-shadow 0.15s;
+    text-decoration: none;
+  }
+
+  .axis-dot:hover {
+    transform: translate(-50%, -50%) scale(1.2);
+    box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.3);
+    z-index: 3;
+  }
+
+  .axis-dot-inner {
+    font-size: 12px;
+  }
+
+  .year-axis {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    padding: 0 2px;
+    margin-top: 0.5rem;
+  }
+
+  .hearings-timeline {
+    position: relative;
+    padding-left: 1rem;
+  }
+
+  .hearings-timeline .timeline-rail {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(to bottom, var(--accent), var(--accent-dim));
+    border-radius: 2px;
+  }
+
+  .hearing-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 1.5rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hearing-card:last-child {
+    border-bottom: none;
+  }
+
+  .hearing-marker::before {
+    content: '';
+    position: absolute;
+    right: -1.35rem;
+    top: 0.4rem;
+    width: 12px;
+    height: 12px;
+    background: var(--accent);
+    border-radius: 50%;
+    border: 3px solid var(--bg);
+    box-shadow: 0 0 0 1px var(--accent);
+  }
+
+  .hearing-date {
+    display: block;
+    font-weight: 600;
+    color: var(--accent);
+    font-size: 0.9rem;
+    text-align: right;
+  }
+
+  .hearing-content h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.1rem;
+    line-height: 1.3;
+  }
+
+  .hearing-desc {
+    margin: 0 0 1rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .hearing-details {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: var(--bg-elevated);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+
+  .detail-block {
+    margin-bottom: 0.75rem;
+  }
+
+  .detail-block:last-child {
+    margin-bottom: 0;
+  }
+
+  .detail-label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+    margin-bottom: 0.25rem;
+  }
+
+  .detail-value {
+    font-size: 0.85rem;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  .detail-list {
+    margin: 0.25rem 0 0;
+    padding-left: 1.25rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .detail-list.key-points {
+    color: var(--text);
+  }
+
+  .detail-list li {
+    margin-bottom: 0.2rem;
+  }
+
+  .hearing-video {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .btn-watch {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: var(--accent);
+    color: var(--bg);
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: background 0.15s, transform 0.1s;
+  }
+
+  .btn-watch:hover {
+    background: var(--accent-dim);
+    color: var(--bg);
+    transform: scale(1.02);
+  }
+
+  .btn-cspan,
+  .btn-docs {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: var(--bg-elevated);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: border-color 0.15s, background 0.15s;
+  }
+
+  .btn-cspan:hover,
+  .btn-docs:hover {
+    border-color: var(--accent);
+    background: var(--bg-card);
+  }
+
+  .btn-inline {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+
+  .btn-inline:hover {
+    color: var(--accent);
+  }
+
+  .hearings-fr {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .hearings-fr h2 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-desc {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .fr-timeline .timeline-rail {
+    background: linear-gradient(to bottom, #0055a4, #0055a480);
+  }
+
+  .fr-card .hearing-marker::before {
+    background: #0055a4;
+    box-shadow: 0 0 0 1px #0055a4;
+  }
+
+  .fr-card .hearing-date {
+    color: #0055a4;
+  }
+
+  .signatures-info {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .geipan-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .back-link {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .back-link a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .back-link a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 640px) {
+    .hearing-card {
+      grid-template-columns: 70px 1fr;
+      gap: 1rem;
+    }
+
+    .hearing-marker::before {
+      right: -1.2rem;
+      width: 10px;
+      height: 10px;
+    }
+  }
+</style>

@@ -1,0 +1,237 @@
+[
+  {
+    "id": "aawsap",
+    "name": "AAWSAP",
+    "dates": "2007-2012",
+    "description": "Advanced Aerospace Weapon System Applications Program. $22M Reid. Contrat BAASS/Bigelow. Précurseur AATIP.",
+    "details": "En 2007, le sénateur Harry Reid (majority leader) obtient 22 M$ de la DIA pour étudier les phénomènes aériens non identifiés. Soutenu par Ted Stevens et Daniel Inouye. Le cahier des charges évite le terme OVNI, parlant de « technologies de rupture pour systèmes aérospatiaux ». BAASS (Robert Bigelow) remporte l'appel d'offres comme unique contractant. Livrables : 38 rapports DIRD, enquêtes terrain (Skinwalker Ranch). Lacatski coordinateur. AAWSAP s'arrête en 2010 ; AATIP continue au Pentagone.",
+    "doc_refs": ["inside-us-gov-covert-ufo", "skinwalkers-pentagon", "imminent-elizondo", "mystery-wire-archives", "ovnis-enquete-declassifiee", "ovnis-lumiere-dossiers-dini"],
+    "people": ["harry-reid", "robert-bigelow", "james-lacatski", "luis-elizondo", "hal-puthoff"],
+    "country": "US",
+    "publications": [
+      {"title": "DIRD — Archive Black Vault (37 PDF)", "url": "https://www.theblackvault.com/documentarchive/the-advanced-aviation-threat-identification-program-aatip-dird-report-research/"},
+      {"title": "Liste DIA AATIP (FAS)", "url": "https://irp.fas.org/dia/aatip-list.pdf"},
+      {"title": "Harry Reid AATIP (DIA FOIA)", "url": "https://www.dia.mil/FOIA/FOIA-Electronic-Reading-Room/FileId/170015/"}
+    ]
+  },
+  {
+    "id": "aatip",
+    "name": "AATIP",
+    "dates": "2007-2017",
+    "description": "Advanced Aerospace Threat Identification Program. Sous-ensemble AAWSAP. Elizondo directeur. Focus menaces.",
+    "details": "Bureau du Pentagone (OSD) focalisé sur les rapports UAP militaires. Luis Elizondo directeur 2010-2017. Sous-ensemble d'AAWSAP, survit après la fin du contrat BAASS. Analyse des vidéos Navy (Tic Tac, Gimbal, GoFast). Stratton lui succède. Mellon critique la transition vers UAPTF puis AARO.",
+    "doc_refs": ["imminent-elizondo", "ovnis-enquete-declassifiee", "ovnis-lumiere-dossiers-dini", "mystery-wire-archives", "inside-us-gov-covert-ufo"],
+    "people": ["luis-elizondo", "harry-reid", "jay-stratton", "christopher-mellon"],
+    "country": "US",
+    "publications": [
+      {"title": "DIRD — Archive Black Vault (37 PDF)", "url": "https://www.theblackvault.com/documentarchive/the-advanced-aviation-threat-identification-program-aatip-dird-report-research/"},
+      {"title": "Liste DIA AATIP (FAS)", "url": "https://irp.fas.org/dia/aatip-list.pdf"}
+    ]
+  },
+  {
+    "id": "uaptf",
+    "name": "UAP Task Force",
+    "dates": "2020-2022",
+    "description": "UAP Task Force. Stratton premier directeur. Remplacé par AARO.",
+    "details": "Créée en août 2020 par le sous-secrétaire à la Défense. Jay Stratton premier directeur. Placée sous l'US Navy. Mission : standardiser la collecte et l'analyse des rapports UAP des militaires. Préparé le DNI Preliminary Assessment (juin 2021). Remplacée par AARO en juillet 2022.",
+    "doc_refs": ["imminent-elizondo", "ovnis-enquete-declassifiee"],
+    "people": ["jay-stratton"],
+    "country": "US",
+    "annual_reports": [
+      {"year": "2021", "title": "Preliminary Assessment UAP", "url": "https://www.dni.gov/files/ODNI/documents/assessments/Preliminary-Assessment-UAP-20210625.pdf"},
+      {"year": "2022", "title": "Annual Report UAP", "url": "https://www.dni.gov/files/ODNI/documents/assessments/Unclassified-2022-Annual-Report-UAP.pdf"}
+    ]
+  },
+  {
+    "id": "aaro",
+    "name": "AARO",
+    "dates": "2022-",
+    "description": "All-domain Anomaly Resolution Office. Remplace UAPTF. Critiqué (Mellon).",
+    "details": "Bureau du Pentagone créé en juillet 2022. Sean Kirkpatrick directeur jusqu'en décembre 2023. Mission : résoudre les anomalies dans tous les domaines (air, mer, espace, transmedium). Publie l'Historical Record Report (mars 2024) niant programmes cachés et crash retrieval. Christopher Mellon et d'autres dénoncent une approche minimisante et des lacunes dans l'accès aux informations classifiées.",
+    "doc_refs": ["imminent-elizondo", "ovnis-enquete-declassifiee", "inside-us-gov-covert-ufo", "ovnis-lumiere-dossiers-dini"],
+    "people": ["christopher-mellon"],
+    "country": "US",
+    "annual_reports": [
+      {"year": "2021", "title": "Preliminary Assessment UAP", "url": "https://www.dni.gov/files/ODNI/documents/assessments/Preliminary-Assessment-UAP-20210625.pdf"},
+      {"year": "2022", "title": "Annual Report UAP", "url": "https://www.dni.gov/files/ODNI/documents/assessments/Unclassified-2022-Annual-Report-UAP.pdf"},
+      {"year": "2023", "title": "FY 2023 Consolidated Annual Report", "url": "https://www.dni.gov/files/ODNI/documents/assessments/FY2023-Consolidated-Annual-Report-UAP-Oct2023.pdf"},
+      {"year": "2024", "title": "FY 2024 Consolidated Annual Report", "url": "https://www.dni.gov/files/ODNI/documents/assessments/DOD-AARO-Consolidated-Annual-Report-on-UAP-Nov2024.pdf"},
+      {"year": "2025", "title": "Mission Brief 2025", "url": "https://www.aaro.mil/Portals/136/PDFs/AARO_Mission_Brief_2025.pdf"},
+      {"year": "2025", "title": "Declassification Info Paper 2025", "url": "https://www.aaro.mil/Portals/136/PDFs/Information%20Papers/AARO_Declassification_Info_Paper_2025.pdf"}
+    ],
+    "publications": [
+      {"title": "Historical Record Report Vol.1 (mars 2024)", "url": "https://www.aaro.mil/Portals/136/PDFs/AARO-Historical-Record-Report-Volume-1-2024.pdf"}
+    ]
+  },
+  {
+    "id": "blue-book",
+    "name": "Project Blue Book",
+    "dates": "1952-1969",
+    "description": "Projet USAF. 12 618 cas. Fermé 1969. Bolender memo.",
+    "details": "Projet officiel de l'US Air Force pour enquêter sur les observations OVNI. 12 618 cas documentés. J. Allen Hynek conseiller scientifique, passe du scepticisme à l'ouverture. Fermé officiellement en 1969. Le memo Bolender (oct. 1969) indique que les cas « d'intérêt pour la sécurité nationale » étaient traités en dehors de Blue Book. Précurseur des programmes modernes.",
+    "doc_refs": ["mystery-wire-archives", "ovnis-enquete-declassifiee", "ovnis-lumiere-dossiers-dini", "imminent-elizondo", "vallee-phenomenes-insolites"],
+    "people": ["j-allen-hynek"],
+    "country": "US",
+    "publications": [
+      {"title": "Archives National Archives (Blue Book)", "url": "https://www.archives.gov/research/military/air-force/ufos.html"},
+      {"title": "Project Blue Book Archive (numérisé)", "url": "https://www.theprojectbluebookarchive.org/"},
+      {"title": "Bulk downloads UAP (NARA)", "url": "https://www.archives.gov/research/catalog/catalog-bulk-downloads/uap-bulk-download"}
+    ]
+  },
+  {
+    "id": "geipan",
+    "name": "GEIPAN / GEPAN / SEPRA",
+    "dates": "1977-",
+    "description": "Groupe d'Étude et d'Information sur les Phénomènes Aérospatiaux Non identifiés. Service CNES. Classification PAN A/B/C/D. ~3 100 cas.",
+    "details": "Service technique du CNES (Centre National d'Études Spatiales). GEPAN (1977), puis SEPRA, puis GEIPAN (2005). Collecte, analyse, enquête et publication des signalements. Classification : A (expliqué), B (très probable), C (données insuffisantes), D (inexpliqué — D1/D2). Enquêteurs bénévoles, collège d'experts, partenaires (Gendarmerie, Armée de l'air, Météo France). Précurseur : étude Vallée 1967. Le GEIPAN ne fait pas de recherche sur la vie extraterrestre.",
+    "doc_refs": ["ovnis-lumiere-dossiers-dini", "ovnis-enquete-declassifiee", "vallee-phenomenes-insolites"],
+    "people": [],
+    "country": "FR",
+    "url": "https://cnes-geipan.fr/",
+    "publications": [
+      {"title": "Statistiques des cas", "url": "https://cnes-geipan.fr/fr/stats"},
+      {"title": "Recherche de cas (base de données)", "url": "https://cnes-geipan.fr/fr/recherche/cas"},
+      {"title": "Mission et méthodologie", "url": "https://cnes-geipan.fr/fr/node/58792"},
+      {"title": "Documentation", "url": "https://cnes-geipan.fr/fr/documentation"}
+    ]
+  },
+  {
+    "id": "cometa",
+    "name": "COMETA",
+    "dates": "1999",
+    "description": "Rapport COMETA. IHEDN. Hypothèse extraterrestre.",
+    "details": "COMité d'ÉTudes Approfondies — association privée d'anciens de l'IHEDN. Général Denis Letty président. Rédaction sur 3 ans avec Jean-Jacques Velasco (CNES), général Domange, Edmond Campagnac (Air France). Rapport de 90 pages remis à Chirac et Jospin. Préface André Lebeau (ex-CNES). Conclusion : « réalité physique quasi-certaine d'objets volants totalement inconnus » ; l'hypothèse extraterrestre « ne peut plus être écartée ». Le GEIPAN précise que cette hypothèse reste non démontrée.",
+    "doc_refs": ["ovnis-lumiere-dossiers-dini", "ovnis-enquete-declassifiee", "inside-us-gov-covert-ufo"],
+    "people": [],
+    "country": "FR",
+    "publications": [
+      {"title": "Rapport COMETA 1999 (PDF)", "url": "https://www.cnes-geipan.fr/sites/default/files/Cometa_0.pdf"}
+    ]
+  },
+  {
+    "id": "sigma2",
+    "name": "Sigma 2 / 3AF",
+    "dates": "2008-",
+    "description": "Commission 3AF. Dini président. Analyse française.",
+    "details": "Commission technique de la 3AF (Association Aéronautique et Astronautique de France). Jean-François Dini président. Analyse scientifique des observations PAN, complémentaire au GEIPAN. Publications et colloques. Approche rigoureuse, sans parti pris sur l'origine du phénomène.",
+    "doc_refs": ["ovnis-lumiere-dossiers-dini", "ovnis-enquete-declassifiee"],
+    "people": [],
+    "country": "FR",
+    "publications": [
+      {"title": "Commission Sigma 2 (3AF)", "url": "https://www.3af.fr/en/groupe/sigma2-unidentified-aerospace-phenomena-43"},
+      {"title": "Work progress summary 2021", "url": "https://www.3af.fr/fr/news/sigma2-work-progress-summary-2021-2178"}
+    ]
+  },
+  {
+    "id": "robertson-panel",
+    "name": "Robertson Panel",
+    "dates": "1953",
+    "description": "Panel CIA. Recommandations debunking. Début stratégie discrédit.",
+    "details": "Comité scientifique convoqué par la CIA en janvier 1953, présidé par le physicien Howard P. Robertson. Contexte : vagues d'observations (Washington D.C. 1952). Conclusions : pas de menace directe, mais risque de saturation des communications militaires par les rapports du public. Recommandations : campagne d'éducation pour réduire l'intérêt du public, implication des médias et de personnalités pour « démystifier », surveillance des groupes ufologiques civils. Marque le début d'une stratégie de discrédit institutionnel.",
+    "doc_refs": ["mystery-wire-archives", "ovnis-enquete-declassifiee"],
+    "people": [],
+    "country": "US",
+    "publications": [
+      {"title": "Robertson Panel Report 1953 (PDF)", "url": "https://documents.theblackvault.com/documents/ufos/robertsonpanelreport.pdf"}
+    ]
+  },
+  {
+    "id": "stargate",
+    "name": "Stargate / Remote Viewing",
+    "dates": "1970s-1995",
+    "description": "Programme remote viewing. Puthoff, Targ. SRI.",
+    "details": "Programme de renseignement par « vision à distance » (remote viewing). SRI International (Stanford Research Institute), Hal Puthoff et Russell Targ. Financement DIA/CIA. Utilisé pour des cibles militaires et de renseignement. Déclassifié en 1995. Liens avec AAWSAP via Puthoff, qui a participé aux DIRDs. Pas directement lié aux UAP mais souvent cité dans le contexte des programmes « exotiques ».",
+    "doc_refs": ["mystery-wire-archives", "imminent-elizondo", "inside-us-gov-covert-ufo"],
+    "people": ["hal-puthoff"],
+    "country": "US",
+    "publications": [
+      {"title": "Stargate Collection (Black Vault, 89 000+ pages)", "url": "https://www.theblackvault.com/documentarchive/the-stargate-collection/"},
+      {"title": "CIA Reading Room — Stargate", "url": "https://www.cia.gov/readingroom/search/site/stargate"},
+      {"title": "STAR GATE Overview (CIA PDF)", "url": "https://www.cia.gov/readingroom/docs/CIA-RDP96-00789R002800180001-2.pdf"},
+      {"title": "Program Plan Project Star Gate (CIA PDF)", "url": "https://www.cia.gov/readingroom/docs/CIA-RDP96-00789R003000110001-6.pdf"}
+    ]
+  },
+  {
+    "id": "legacy-program",
+    "name": "Programme Legacy",
+    "dates": "1947-",
+    "description": "Crash retrieval, reverse engineering. Lockheed, Northrop, Boeing, Raytheon. CIA, AF, DOE.",
+    "details": "Programme allégué par David Grusch et d'autres whistleblowers. Récupération d'épaves non-humaines, reverse engineering par des sous-traitants (Lockheed, Northrop, Boeing, Raytheon). Impliquerait CIA, Air Force, DOE. Non confirmé officiellement. Mentionné dans l'UAP Disclosure Act (Schumer/Rounds) et les auditions 2023-2024. Eric Davis et Luis Elizondo cités comme ayant eu accès à des informations liées.",
+    "doc_refs": ["imminent-elizondo", "mystery-wire-archives", "ovnis-enquete-declassifiee"],
+    "people": ["luis-elizondo", "david-grusch", "eric-davis"],
+    "country": "US",
+    "publications": [
+      {"title": "Pentagon review Mellon crash retrieval (Black Vault)", "url": "https://www.theblackvault.com/documentarchive/inside-the-pentagons-review-of-christopher-mellons-alleged-ufo-crash-retrieval-text/"},
+      {"title": "OSD FOIA Reading Room — UFOs/UAPs", "url": "https://www.esd.whs.mil/FOIA/Reading-Room/Reading-Room-List_2/UFOsandUAPs/"}
+    ]
+  },
+  {
+    "id": "dirds",
+    "name": "DIRDs (38 rapports)",
+    "dates": "2008",
+    "description": "Defense Intelligence Reference Documents. 38 rapports physique UAP. Puthoff, Davis. 10 publiés.",
+    "details": "38 rapports scientifiques commandés par la DIA dans le cadre d'AAWSAP/AATIP. Thèmes : propulsion exotique, warp drive, métamatériaux, physique théorique. Auteurs : Hal Puthoff (IAS), Eric Davis (Warp Drive Metrics), et autres. 10 titres publiés (Black Vault, FAS). Les 38 listés dans un document DIA FOIA. Utilisés pour identifier des « technologies de rupture » potentielles.",
+    "doc_refs": ["inside-us-gov-covert-ufo", "mystery-wire-archives", "imminent-elizondo"],
+    "people": ["hal-puthoff", "eric-davis"],
+    "country": "US",
+    "publications": [
+      {"title": "DIRD — Archive Black Vault (37 PDF)", "url": "https://www.theblackvault.com/documentarchive/the-advanced-aviation-threat-identification-program-aatip-dird-report-research/"},
+      {"title": "Liste DIA AATIP (FAS)", "url": "https://irp.fas.org/dia/aatip-list.pdf"}
+    ]
+  },
+  {
+    "id": "immaculate-constellation",
+    "name": "Immaculate Constellation",
+    "dates": "2024",
+    "description": "Document soumis Congrès. Révélations programme.",
+    "details": "Document déclassifié partiellement et soumis au Congrès en 2024. Contient des révélations sur des programmes UAP non divulgués. Obtenu via FOIA DNI. Mentionné dans le contexte des auditions et du UAP Disclosure Act. Détails spécifiques restent limités.",
+    "doc_refs": ["ovnis-enquete-declassifiee", "imminent-elizondo"],
+    "people": [],
+    "country": "US",
+    "publications": [
+      {"title": "Immaculate Constellation (DNI FOIA PDF)", "url": "https://www.dni.gov/files/documents/FOIA/DF-2025-00021-Immaculate-Constellation-descrp-from-UNCLASS-Press-22-Oct-2024.pdf"},
+      {"title": "DNI FOIA — IC Legal Reference", "url": "https://www.dni.gov/index.php/ic-legal-reference-book/ic-legal-reference-book-foia"}
+    ]
+  },
+  {
+    "id": "moon-dust",
+    "name": "Moon Dust / Blue Fly",
+    "dates": "1950s-",
+    "description": "Récupération débris spatiaux. Mentionné Mystery Wire.",
+    "details": "Programmes USAF pour la récupération de débris spatiaux et d'objets d'intérêt. Moon Dust : identification de débris d'origine inconnue. Blue Fly : récupération rapide d'objets. Mentionnés dans le contexte des récupérations d'épaves et des programmes de renseignement. Documents partiellement déclassifiés.",
+    "doc_refs": ["mystery-wire-archives", "imminent-elizondo"],
+    "people": [],
+    "country": "US",
+    "publications": [
+      {"title": "Moon Dust / Blue Fly (Black Vault PDF)", "url": "https://documents.theblackvault.com/documents/ufos/MoonDustAug2009.pdf"},
+      {"title": "Project Moondust & Blue Fly (Majestic Documents)", "url": "https://majesticdocuments.com/investigations/official/project-moondust-blue-fly/"},
+      {"title": "CUFON FOIA Moon Dust", "url": "https://cufon.org/cufon/foia_009.htm"}
+    ]
+  },
+  {
+    "id": "nids",
+    "name": "NIDS",
+    "dates": "1996-2004",
+    "description": "National Institute for Discovery Science. Bigelow. Skinwalker Ranch.",
+    "details": "Institut privé fondé par Robert Bigelow. Recherche sur les phénomènes anormaux : OVNI, paranormal. Acquisition du Skinwalker Ranch (Utah) en 1996. Équipe : Hal Puthoff, Jacques Vallée, Eric Davis. Enquêtes terrain, instrumentation. Fermé en 2004. Précurseur direct de BAASS et du contrat AAWSAP. Documenté dans « Hunt for the Skinwalker ».",
+    "doc_refs": ["skinwalkers-pentagon"],
+    "people": ["robert-bigelow", "hal-puthoff", "jacques-vallee", "eric-davis"],
+    "country": "US",
+    "publications": [
+      {"title": "Hunt for the Skinwalker (livre)", "url": "https://www.simonandschuster.com/books/Hunt-for-the-Skinwalker/George-Knapp/9781510755412"}
+    ]
+  },
+  {
+    "id": "baass",
+    "name": "BAASS",
+    "dates": "2008-2012",
+    "description": "Bigelow Aerospace Advanced Space Studies. Contrat AAWSAP.",
+    "details": "Filiale de Bigelow Aerospace créée pour répondre à l'appel d'offres AAWSAP. Unique contractant du programme 22 M$. Équipe issue de NIDS. Livrables : 38 rapports DIRD, enquêtes sur les observations UAP, travail au Skinwalker Ranch. James Lacatski coordinateur. Contrat terminé vers 2010 ; certaines activités AATIP ont continué au Pentagone sans BAASS.",
+    "doc_refs": ["inside-us-gov-covert-ufo", "skinwalkers-pentagon", "ovnis-lumiere-dossiers-dini"],
+    "people": ["robert-bigelow"],
+    "country": "US",
+    "publications": [
+      {"title": "DIRD — Archive Black Vault (37 PDF)", "url": "https://www.theblackvault.com/documentarchive/the-advanced-aviation-threat-identification-program-aatip-dird-report-research/"}
+    ]
+  }
+]

@@ -1,0 +1,462 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+const contentDir = path.join(process.cwd(), 'content');
+const incidentsRaw = JSON.parse(fs.readFileSync(path.join(contentDir, 'incidents.json'), 'utf-8'));
+// Tri chronologique pour afficher les plus récents en bas
+const incidents = [...incidentsRaw].sort((a, b) => {
+  const ya = parseInt(String(a.date).match(/\d{4}/)?.[0] || '0', 10);
+  const yb = parseInt(String(b.date).match(/\d{4}/)?.[0] || '0', 10);
+  if (ya !== yb) return ya - yb;
+  const ma = parseInt(String(a.date).match(/-(\d{2})/)?.[1] || '01', 10);
+  const mb = parseInt(String(b.date).match(/-(\d{2})/)?.[1] || '01', 10);
+  return ma - mb;
+});
+const people = JSON.parse(fs.readFileSync(path.join(contentDir, 'people.json'), 'utf-8'));
+const programs = JSON.parse(fs.readFileSync(path.join(contentDir, 'programs.json'), 'utf-8'));
+const docsMeta = JSON.parse(fs.readFileSync(path.join(contentDir, 'docs-meta.json'), 'utf-8'));
+const documentaryChapters = JSON.parse(fs.readFileSync(path.join(contentDir, 'documentary-chapters.json'), 'utf-8'));
+const videos = JSON.parse(fs.readFileSync(path.join(contentDir, 'videos.json'), 'utf-8'));
+
+const peopleMap = Object.fromEntries(people.map((p: { id: string; name: string }) => [p.id, p.name]));
+const programsMap = Object.fromEntries(programs.map((p: { id: string; name: string }) => [p.id, p.name]));
+const docsMap = Object.fromEntries(docsMeta.map((d: { slug: string; title: string }) => [d.slug, d.title]));
+const chaptersMap = Object.fromEntries(documentaryChapters.map((c: { id: number; title: string }) => [c.id, c]));
+const videosMap = Object.fromEntries(videos.map((v: { id: string; title: string; youtube_id?: string; url?: string }) => [v.id, v]));
+
+function docTitle(slug: string) {
+  return docsMap[slug] || slug.replace(/-/g, ' ');
+}
+
+// Drapeaux par lieu (priorité au match le plus spécifique)
+const FLAG_MAP: [RegExp | string, string][] = [
+  [/europe|pacifique|wwii/i, '🌍'],
+  [/urss|kapustin|petrozavodsk/i, '🇷🇺'],
+  [/uk|lakenheath|rendlesham|bentwaters/i, '🇬🇧'],
+  [/france|valensole|trans-en-provence/i, '🇫🇷'],
+  [/belgique/i, '🇧🇪'],
+  [/australie|melbourne|westall/i, '🇦🇺'],
+  [/iran|téhéran|tehran/i, '🇮🇷'],
+  [/brésil|colares|varginha|brasil/i, '🇧🇷'],
+  [/zimbabwe|ruwa/i, '🇿🇼'],
+  [/porto rico|aguadilla/i, '🇵🇷'],
+  [/nouveau-mexique|washington|mississippi|oklahoma|new hampshire|socorro|kecksburg|pennsylvanie|big sur|californie|malmstrom|montana|texas|arizona|utah|san diego|virginie|vandenberg/i, '🇺🇸'],
+];
+function getFlag(location: string): string {
+  for (const [pattern, flag] of FLAG_MAP) {
+    if (typeof pattern === 'string' ? location.includes(pattern) : pattern.test(location)) return flag;
+  }
+  return '🌍';
+}
+
+// Année pour la timeline (parse premier nombre 4 chiffres)
+function getYear(date: string): number {
+  const m = date.match(/\d{4}/);
+  return m ? parseInt(m[0], 10) : 0;
+}
+
+// Incidents triés par date pour la timeline
+const incidentsByYear = [...incidents].sort((a, b) => getYear(a.date) - getYear(b.date));
+const minYear = Math.min(...incidentsByYear.map(i => getYear(i.date)));
+const maxYear = Math.max(...incidentsByYear.map(i => getYear(i.date)));
+const yearSpan = maxYear - minYear || 1;
+---
+
+<BaseLayout title="Incidents clés" description="~33 incidents majeurs avec documents, personnes, programmes et chapitres documentaire.">
+  <h1>Incidents clés</h1>
+  <p class="intro">Fiches détaillées par incident : date, lieu, description, points clés, documents, personnes, programmes, chapitres documentaire.</p>
+
+  <section class="timeline-section" aria-label="Timeline des incidents">
+    <h2 class="timeline-title">Timeline</h2>
+    <div class="timeline-track">
+      <div class="timeline-axis">
+        {Array.from({ length: Math.ceil((maxYear - minYear) / 10) + 1 }, (_, i) => minYear + i * 10).map((y) => (
+          <span class="timeline-year-marker" style={`left: ${((y - minYear) / yearSpan) * 100}%`}>{y}</span>
+        ))}
+      </div>
+      <div class="timeline-line"></div>
+      <div class="timeline-dots">
+        {incidentsByYear.map((inc, idx) => {
+          const year = getYear(inc.date);
+          const basePos = ((year - minYear) / yearSpan) * 100;
+          const sameYearCount = incidentsByYear.filter((i, j) => idx >= j && getYear(i.date) === year).length - 1;
+          const leftPos = Math.min(98, basePos + sameYearCount * 1.5);
+          return (
+            <a
+              href={`#${inc.id}`}
+              class="timeline-dot"
+              style={`left: ${leftPos}%`}
+              title={`${inc.name} (${inc.date})`}
+              aria-label={`${inc.name}, ${inc.date}`}
+            >
+              <span class="timeline-dot-flag">{getFlag(inc.location)}</span>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <div class="incidents-list">
+    {incidents.map((inc: {
+      id: string;
+      name: string;
+      date: string;
+      location: string;
+      description: string;
+      details?: string;
+      key_points?: string[];
+      doc_refs?: string[];
+      people?: string[];
+      programs?: string[];
+      video_refs?: string[];
+      documentary_chapters?: number[];
+      themes?: string[];
+    }) => (
+      <article class="incident-card" id={inc.id}>
+        <header class="incident-header">
+          <h2><span class="incident-flag" aria-hidden="true">{getFlag(inc.location)}</span> {inc.name}</h2>
+          <p class="meta">{inc.date} — {inc.location}</p>
+        </header>
+
+        <p class="description">{inc.description}</p>
+
+        {inc.details && (
+          <div class="details">
+            <p>{inc.details}</p>
+          </div>
+        )}
+
+        {inc.key_points && inc.key_points.length > 0 && (
+          <div class="key-points">
+            <span class="label">Points clés :</span>
+            <ul>
+              {inc.key_points.map((pt: string) => (
+                <li>{pt}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <div class="links-grid">
+          {inc.people && inc.people.length > 0 && (
+            <div class="link-group">
+              <span class="label">Personnes :</span>
+              <div class="badges">
+                {inc.people.map((slug: string) => (
+                  <a href={`/people/${slug}/`} class="badge">{peopleMap[slug] || slug}</a>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {inc.programs && inc.programs.length > 0 && (
+            <div class="link-group">
+              <span class="label">Programmes :</span>
+              <div class="badges">
+                {inc.programs.map((id: string) => (
+                  <a href={`/programs/#${id}`} class="badge badge-program">{programsMap[id] || id}</a>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {inc.doc_refs && inc.doc_refs.length > 0 && (
+            <div class="link-group">
+              <span class="label">Documents :</span>
+              <div class="badges">
+                {inc.doc_refs.map((slug: string) => (
+                  <a href={`/documents/${slug}/`} class="badge badge-doc">{docTitle(slug)}</a>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {inc.documentary_chapters && inc.documentary_chapters.length > 0 && (
+            <div class="link-group">
+              <span class="label">Documentaire :</span>
+              <div class="badges">
+                {inc.documentary_chapters.map((chId: number) => {
+                  const ch = chaptersMap[chId];
+                  const ts = ch?.timestamp_seconds;
+                  const url = ts ? `/documentary/#t=${ts}` : '/documentary/';
+                  return (
+                    <a href={url} class="badge badge-doc">{ch?.title || `Ch. ${chId}`}</a>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {inc.video_refs && inc.video_refs.length > 0 && (
+            <div class="link-group">
+              <span class="label">Vidéos :</span>
+              <div class="badges">
+                {inc.video_refs.map((vidId: string) => {
+                  const v = videosMap[vidId];
+                  const href = v?.youtube_id ? `https://www.youtube.com/watch?v=${v.youtube_id}` : v?.url || '#';
+                  return (
+                    <a href={href} target="_blank" rel="noopener noreferrer" class="badge badge-video">{v?.title || vidId}</a>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {inc.themes && inc.themes.length > 0 && (
+            <div class="link-group">
+              <span class="label">Thèmes :</span>
+              <span class="themes">{inc.themes.join(', ')}</span>
+            </div>
+          )}
+        </div>
+      </article>
+    ))}
+  </div>
+</BaseLayout>
+
+<style>
+  .intro {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  .timeline-section {
+    margin-bottom: 3rem;
+    padding: 1.5rem;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+
+  .timeline-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin: 0 0 1rem;
+  }
+
+  .timeline-track {
+    position: relative;
+    height: 100px;
+    margin-top: 0.5rem;
+  }
+
+  .timeline-axis {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 24px;
+    pointer-events: none;
+  }
+
+  .timeline-year-marker {
+    position: absolute;
+    transform: translateX(-50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+  }
+
+  .timeline-line {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 1px;
+    opacity: 0.6;
+  }
+
+  .timeline-dots {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  .timeline-dot {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-card);
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    z-index: 2;
+  }
+
+  .timeline-dot:hover {
+    transform: translate(-50%, -50%) scale(1.2);
+    box-shadow: 0 0 0 4px var(--bg-elevated);
+  }
+
+  .timeline-dot-flag {
+    font-size: 1rem;
+    line-height: 1;
+  }
+
+  .incident-flag {
+    font-size: 1.1em;
+    margin-right: 0.35rem;
+  }
+
+  .incidents-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .incident-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .incident-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--accent), var(--accent2));
+  }
+
+  .incident-header {
+    margin-bottom: 0.75rem;
+  }
+
+  .incident-card h2 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.35rem;
+    margin: 0 0 0.25rem;
+  }
+
+  .meta {
+    font-size: 0.9rem;
+    color: var(--accent);
+    margin: 0;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .description {
+    font-size: 1rem;
+    color: var(--text);
+    margin-bottom: 1rem;
+    line-height: 1.55;
+  }
+
+  .details {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: var(--bg-elevated);
+    border-radius: 8px;
+    border-left: 3px solid var(--accent);
+  }
+
+  .details p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .key-points {
+    margin-bottom: 1.25rem;
+  }
+
+  .key-points .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .key-points ul {
+    margin: 0;
+    padding-left: 1.25rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .links-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .link-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+
+  .link-group .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .badge {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.65rem;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--accent);
+  }
+
+  .badge:hover {
+    border-color: var(--accent);
+    text-decoration: none;
+  }
+
+  .badge-program {
+    color: var(--accent2);
+  }
+
+  .badge-doc {
+    color: var(--text);
+  }
+
+  .badge-video {
+    color: var(--accent-dim);
+  }
+
+  .themes {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+</style>

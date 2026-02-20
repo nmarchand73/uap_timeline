@@ -1,0 +1,81 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+const themesPath = path.join(process.cwd(), 'content', 'themes.json');
+const themes = JSON.parse(fs.readFileSync(themesPath, 'utf-8'));
+const docsPath = path.join(process.cwd(), 'content', 'docs-meta.json');
+const docs = JSON.parse(fs.readFileSync(docsPath, 'utf-8'));
+---
+
+<BaseLayout title="Thèmes" description="10 axes thématiques avec filtres croisés.">
+  <h1>Thèmes</h1>
+  <p class="intro">10 axes principaux. Cliquez sur un thème pour voir les documents associés.</p>
+
+  <div class="themes-grid">
+    {themes.map((t: { id: string; label: string; description: string; doc_refs: string[] }) => (
+      <article class="theme-card">
+        <h2>{t.label}</h2>
+        <p>{t.description}</p>
+        <div class="doc-refs">
+          <h4>Documents</h4>
+          <ul>
+            {t.doc_refs.map((slug: string) => {
+              const doc = docs.find((d: { slug: string }) => d.slug === slug);
+              return doc ? (
+                <li><a href={`/documents/${doc.slug}/`}>{doc.title}</a></li>
+              ) : null;
+            })}
+          </ul>
+        </div>
+      </article>
+    ))}
+  </div>
+</BaseLayout>
+
+<style>
+  .intro {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+  }
+
+  .themes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .theme-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+  }
+
+  .theme-card h2 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .theme-card p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+  }
+
+  .doc-refs h4 {
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-muted);
+  }
+
+  .doc-refs ul {
+    margin: 0;
+    padding-left: 1.25rem;
+  }
+
+  .doc-refs li {
+    margin-bottom: 0.25rem;
+  }
+</style>

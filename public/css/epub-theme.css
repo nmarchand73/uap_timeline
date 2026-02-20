@@ -1,0 +1,18 @@
+/* Thème sombre pour le lecteur EPUB (injecté dans l'iframe) */
+body {
+  background: #12121a !important;
+  color: #e0e0e8 !important;
+}
+a {
+  color: #00d4aa !important;
+}
+a:hover {
+  color: #00a080 !important;
+}
+h1, h2, h3, h4, h5, h6 {
+  color: #e0e0e8 !important;
+}
+blockquote {
+  border-left-color: #00d4aa !important;
+  color: #8888a0 !important;
+}

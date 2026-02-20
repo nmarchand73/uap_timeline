@@ -1,0 +1,773 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+const timelinePath = path.join(process.cwd(), 'content', 'timeline-events.json');
+const timelineEvents = JSON.parse(fs.readFileSync(timelinePath, 'utf-8'));
+const incidentsPath = path.join(process.cwd(), 'content', 'incidents.json');
+const incidents = JSON.parse(fs.readFileSync(incidentsPath, 'utf-8'));
+const docsPath = path.join(process.cwd(), 'content', 'docs-meta.json');
+const docs = JSON.parse(fs.readFileSync(docsPath, 'utf-8'));
+const videosPath = path.join(process.cwd(), 'content', 'videos.json');
+const videos = JSON.parse(fs.readFileSync(videosPath, 'utf-8'));
+const chaptersPath = path.join(process.cwd(), 'content', 'documentary-chapters.json');
+const chapters = JSON.parse(fs.readFileSync(chaptersPath, 'utf-8'));
+
+function parseDate(dateStr: string): { year: number; month: number | null } {
+  if (!dateStr) return { year: 0, month: null };
+  const range = dateStr.match(/^(\d{4})-(\d{4})$/);
+  if (range) return { year: parseInt(range[1], 10), month: null };
+  const m = dateStr.match(/^(\d{4})-(\d{1,2})(?:-(\d{1,2}))?$/);
+  if (m) return { year: parseInt(m[1], 10), month: parseInt(m[2], 10) };
+  const y = dateStr.match(/^(\d{4})/);
+  return y ? { year: parseInt(y[1], 10), month: null } : { year: 0, month: null };
+}
+
+const coveredIncidentIds = new Set([
+  'trinity-crash-1945', 'roswell-1947', 'washington-1952', 'vague-francaise-1954',
+  'socorro-1964', 'kecksburg-1965', 'malmstrom-1967', 'colares-1977',
+  'cash-landrum-1980', 'rendlesham-1980', 'phoenix-lights-1997',
+  'nimitz-tic-tac-2004', 'uss-roosevelt-2014',
+]);
+
+const incidentEvents = incidents
+  .filter((i: { id: string }) => !coveredIncidentIds.has(i.id))
+  .map((i: { id: string; name: string; date: string; description: string; doc_refs?: string[]; video_refs?: string[]; documentary_chapters?: number[]; people?: string[]; themes?: string[] }) => {
+    const { year, month } = parseDate(i.date);
+    return {
+      year,
+      month,
+      label: i.name,
+      description: i.description,
+      doc_refs: i.doc_refs || [],
+      video_refs: i.video_refs || [],
+      documentary_chapters: i.documentary_chapters || [],
+      people: i.people || [],
+      themes: i.themes || [],
+      incident_id: i.id,
+    };
+  })
+  .filter((e: { year: number }) => e.year >= 1945);
+
+const events = [...timelineEvents, ...incidentEvents].sort((a, b) => {
+  const da = a.year * 12 + (a.month || 0);
+  const db = b.year * 12 + (b.month || 0);
+  return da - db;
+});
+
+const bookDocs = docs.filter((d: { type: string }) => d.type === 'book' || d.type === 'report');
+const yearMin = 1945;
+const yearMax = 2026;
+
+const bandColors = [
+  'var(--accent)',
+  '#00b894',
+  '#0984e3',
+  '#6c5ce7',
+  '#e17055',
+  '#fdcb6e',
+  '#00cec9',
+  '#a29bfe',
+];
+function getDocColor(i: number) {
+  return bandColors[i % bandColors.length];
+}
+
+const themeSymbols: Record<string, string> = {
+  whistleblowers: '🎤',
+  'combat-legislatif': '⚖️',
+  dissimulation: '🔒',
+  'lien-nucleaire': '☢️',
+  'reverse-engineering': '🔧',
+  'effets-biologiques': '🧬',
+  'observables-physique': '📡',
+  'aawsap-aatip': '🏛️',
+  'phenomene-mondial': '🌍',
+  'perspective-francaise': '🇫🇷',
+};
+function getEventSymbol(e: { incident_id?: string; themes?: string[] }): string {
+  if (e.incident_id) return '🛸';
+  const themes = e.themes || [];
+  for (const t of themes) {
+    if (themeSymbols[t]) return themeSymbols[t];
+  }
+  return '📄';
+}
+---
+
+<BaseLayout title="Timeline 1945-2026" description="Axe chronologique interactif des événements UAP de 1945 à 2026.">
+  <h1>Timeline 1945-2026</h1>
+  <p class="intro">Tous les événements UAP : jalons historiques + incidents clés. Documents, vidéos, chapitres du documentaire et personnes. <a href="/timeline/auditions/">→ Timeline des auditions au Congrès</a></p>
+
+  <section class="events-track">
+    <h2>Événements sur l'axe 1945-2026</h2>
+    <div class="events-axis">
+      <div class="events-track-bar">
+        {events.map((e: { year: number; month: number | null; label: string; incident_id?: string; themes?: string[] }, idx: number) => {
+          const pos = ((e.year - yearMin) * 12 + (e.month || 6)) / ((yearMax - yearMin) * 12) * 100;
+          const id = e.incident_id ? `incident-${e.incident_id}` : `event-${e.year}-${idx}`;
+          const shortLabel = e.label.length > 45 ? e.label.slice(0, 42) + '…' : e.label;
+          const symbol = getEventSymbol(e);
+          return (
+            <a
+              href={`#${id}`}
+              class="event-dot"
+              style={`left: ${Math.min(99, Math.max(0, pos))}%`}
+              title={`${e.year}${e.month ? `-${String(e.month).padStart(2, '0')}` : ''} — ${e.label}`}
+              aria-label={shortLabel}
+            >
+              <span class="event-dot-symbol">{symbol}</span>
+            </a>
+          );
+        })}
+      </div>
+      <div class="year-axis">
+        <span>1945</span>
+        <span>1960</span>
+        <span>1980</span>
+        <span>2000</span>
+        <span>2026</span>
+      </div>
+      <div class="events-legend">
+        <span><span class="legend-symbol">🛸</span> Incident</span>
+        <span><span class="legend-symbol">🎤</span> Whistleblower</span>
+        <span><span class="legend-symbol">⚖️</span> Législation</span>
+        <span><span class="legend-symbol">🔒</span> Dissimulation</span>
+        <span><span class="legend-symbol">☢️</span> Nucléaire</span>
+        <span><span class="legend-symbol">🔧</span> Reverse engineering</span>
+        <span><span class="legend-symbol">🧬</span> Effets biologiques</span>
+        <span><span class="legend-symbol">📡</span> Observables</span>
+        <span><span class="legend-symbol">🏛️</span> AAWSAP/AATIP</span>
+        <span><span class="legend-symbol">🌍</span> Phénomène mondial</span>
+        <span><span class="legend-symbol">🇫🇷</span> France</span>
+        <span><span class="legend-symbol">📄</span> Autre</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="book-bands">
+    <h2>Périodes couvertes par les documents</h2>
+    <div class="bands-stack">
+      {bookDocs.map((doc: { slug: string; title: string; period_start: number; period_end: number }, i: number) => {
+        const start = Math.max(doc.period_start || yearMin, yearMin);
+        const end = Math.min(doc.period_end || yearMax, yearMax);
+        const left = ((start - yearMin) / (yearMax - yearMin)) * 100;
+        const width = ((end - start) / (yearMax - yearMin)) * 100;
+        const shortTitle = doc.title.length > 28 ? doc.title.slice(0, 26) + '…' : doc.title;
+        return (
+          <a
+            href={`/documents/${doc.slug}/`}
+            class="band-row"
+            title={`${doc.title} (${start}–${end})`}
+          >
+            <span class="band-title">{shortTitle}</span>
+            <div class="band-track">
+              <span class="band-segment" style={`left: ${left}%; width: ${width}%; background: ${getDocColor(i)}`}></span>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+    <div class="year-axis">
+      <span>1945</span>
+      <span>1960</span>
+      <span>1980</span>
+      <span>2000</span>
+      <span>2026</span>
+    </div>
+  </section>
+
+  <div class="timeline">
+    <div class="timeline-rail"></div>
+    {events.map((e: { year: number; month: number | null; label: string; description: string; doc_refs: string[]; video_refs: string[]; documentary_chapters: number[]; people: string[]; themes: string[]; incident_id?: string }, idx: number) => (
+        <article class="timeline-item" id={e.incident_id ? `incident-${e.incident_id}` : `event-${e.year}-${idx}`}>
+          <div class="timeline-marker">
+            <span class="year">{e.year}</span>
+            {e.month && <span class="month">{['','jan','fév','mar','avr','mai','juin','juil','août','sep','oct','nov','déc'][e.month]}</span>}
+          </div>
+          <div class="timeline-content">
+            <h3>{e.label}</h3>
+            <p class="description">{e.description}</p>
+            <div class="links-grid">
+              {e.incident_id && (
+                <div class="link-group">
+                  <a href={`/incidents/#${e.incident_id}`} class="badge badge-incident">📍 Fiche incident</a>
+                </div>
+              )}
+              {e.doc_refs?.length > 0 && (
+                <div class="link-group">
+                  <span class="link-label">Documents</span>
+                  {e.doc_refs.map((slug: string) => {
+                    const doc = docs.find((d: { slug: string }) => d.slug === slug);
+                    return doc ? (
+                      <a href={`/documents/${doc.slug}/`} class="badge badge-doc">📄 {doc.title.slice(0, 30)}{doc.title.length > 30 ? '…' : ''}</a>
+                    ) : null;
+                  })}
+                </div>
+              )}
+              {e.documentary_chapters?.length > 0 && (
+                <div class="link-group">
+                  <span class="link-label">Documentaire</span>
+                  {e.documentary_chapters.map((chId: number) => {
+                    const ch = chapters.find((c: { id: number }) => c.id === chId);
+                    const ts = ch?.timestamp_seconds ?? 0;
+                    return (
+                      <a href={`/documentary/#t=${ts}`} class="badge badge-doc">🎬 Ch. {chId}</a>
+                    );
+                  })}
+                </div>
+              )}
+              {e.video_refs?.length > 0 && (
+                <div class="link-group">
+                  <span class="link-label">Vidéos</span>
+                  {e.video_refs.map((vidId: string) => {
+                    const v = videos.find((x: { id: string }) => x.id === vidId);
+                    if (!v?.youtube_id) return null;
+                    const embedSrc = (v as { youtube_playlist?: string }).youtube_playlist
+                      ? `https://www.youtube.com/embed/videoseries?list=${(v as { youtube_playlist: string }).youtube_playlist}`
+                      : `https://www.youtube.com/embed/${v.youtube_id}`;
+                    return (
+                      <button
+                        type="button"
+                        class="badge badge-video"
+                        data-video-popup
+                        data-embed-src={embedSrc}
+                        data-video-title={v.title ?? ''}
+                      >
+                        ▶️ {v.title?.slice(0, 28)}{(v.title?.length || 0) > 28 ? '…' : ''}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+              {e.people?.length > 0 && (
+                <div class="link-group">
+                  <span class="link-label">Personnes</span>
+                  {e.people.map((id: string) => (
+                    <a href={`/people/${id}/`} class="badge badge-person">👤 {id.replace(/-/g, ' ')}</a>
+                  ))}
+                </div>
+              )}
+              {e.themes?.length > 0 && (
+                <div class="link-group">
+                  {e.themes.map((t: string) => (
+                    <span class="theme-badge">{t.replace(/-/g, ' ')}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </article>
+    ))}
+  </div>
+
+  <div id="video-popup-overlay" class="video-popup-overlay" aria-hidden="true">
+    <div class="video-popup" role="dialog" aria-modal="true" aria-labelledby="video-popup-title">
+      <div class="video-popup-header">
+        <h2 id="video-popup-title" class="video-popup-title"></h2>
+        <button type="button" class="video-popup-close" aria-label="Fermer">×</button>
+      </div>
+      <div class="video-popup-body">
+        <div class="video-popup-embed">
+          <iframe id="video-popup-iframe" title="" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const overlay = document.getElementById('video-popup-overlay');
+      const iframe = document.getElementById('video-popup-iframe');
+      const titleEl = document.getElementById('video-popup-title');
+      const closeBtn = overlay?.querySelector('.video-popup-close');
+
+      function openPopup(embedSrc: string, title: string) {
+        if (!overlay || !iframe || !titleEl) return;
+        iframe.src = embedSrc;
+        titleEl.textContent = title;
+        overlay.classList.add('is-open');
+        overlay.setAttribute('aria-hidden', 'false');
+        closeBtn?.focus();
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closePopup() {
+        if (!overlay || !iframe) return;
+        overlay.classList.remove('is-open');
+        overlay.setAttribute('aria-hidden', 'true');
+        iframe.src = '';
+        document.body.style.overflow = '';
+      }
+
+      document.querySelectorAll('[data-video-popup]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const src = btn.getAttribute('data-embed-src');
+          const title = btn.getAttribute('data-video-title') ?? '';
+          if (src) openPopup(src, title);
+        });
+      });
+
+      closeBtn?.addEventListener('click', closePopup);
+      overlay?.addEventListener('click', (e) => {
+        if (e.target === overlay) closePopup();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && overlay?.classList.contains('is-open')) closePopup();
+      });
+    })();
+  </script>
+</BaseLayout>
+
+<style>
+  .intro {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+  }
+
+  .intro a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .intro a:hover {
+    text-decoration: underline;
+  }
+
+  .events-track {
+    margin-bottom: 3rem;
+    padding: 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+
+  .events-track h2 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .events-axis {
+    margin-bottom: 0;
+  }
+
+  .events-track-bar {
+    position: relative;
+    height: 2.5rem;
+    background: var(--bg-elevated);
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+  }
+
+  .event-dot {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    background: var(--bg-card);
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    z-index: 2;
+    transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+    text-decoration: none;
+  }
+
+  .event-dot:hover {
+    transform: translate(-50%, -50%) scale(1.3);
+    border-color: var(--accent-dim);
+    box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.3);
+    z-index: 3;
+  }
+
+  .event-dot-symbol {
+    font-size: 12px;
+    line-height: 1;
+  }
+
+  .events-track .year-axis {
+    margin-top: 0.5rem;
+  }
+
+  .events-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    margin-top: 1rem;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+  }
+
+  .legend-symbol {
+    margin-right: 0.2rem;
+  }
+
+  .book-bands {
+    margin-bottom: 3rem;
+    padding: 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+
+  .book-bands h2 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .bands-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .band-row {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.4rem 0;
+    text-decoration: none;
+    color: var(--text);
+    border-radius: 6px;
+    transition: background 0.15s;
+  }
+
+  .band-row:hover {
+    background: var(--bg-elevated);
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .band-title {
+    font-size: 0.8rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .band-track {
+    position: relative;
+    height: 1.25rem;
+    background: var(--bg-elevated);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .band-segment {
+    position: absolute;
+    top: 2px;
+    height: calc(100% - 4px);
+    border-radius: 4px;
+    transition: opacity 0.15s;
+  }
+
+  .band-row:hover .band-segment {
+    opacity: 1;
+  }
+
+  .year-axis {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    padding: 0 2px;
+  }
+
+  .timeline {
+    position: relative;
+    padding-left: 1rem;
+  }
+
+  .timeline-rail {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(to bottom, var(--accent), var(--accent-dim));
+    border-radius: 2px;
+  }
+
+  .timeline-item {
+    position: relative;
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 1.5rem;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .timeline-item:last-child {
+    border-bottom: none;
+  }
+
+  .timeline-marker {
+    position: relative;
+    text-align: right;
+    padding-right: 1rem;
+  }
+
+  .timeline-marker::before {
+    content: '';
+    position: absolute;
+    right: -1.35rem;
+    top: 0.4rem;
+    width: 12px;
+    height: 12px;
+    background: var(--accent);
+    border-radius: 50%;
+    border: 3px solid var(--bg);
+    box-shadow: 0 0 0 1px var(--accent);
+  }
+
+  .year {
+    display: block;
+    font-weight: 700;
+    color: var(--accent);
+    font-size: 1.25rem;
+  }
+
+  .month {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: lowercase;
+  }
+
+  .timeline-content h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.1rem;
+    line-height: 1.3;
+  }
+
+  .description {
+    margin: 0 0 1rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .links-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+  }
+
+  .link-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .link-label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-right: 0.25rem;
+  }
+
+  .badge {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    transition: transform 0.1s, background 0.15s;
+  }
+
+  .badge,
+  .badge-video {
+    cursor: pointer;
+    border: none;
+    font: inherit;
+    line-height: inherit;
+  }
+
+  .badge:hover {
+    transform: scale(1.02);
+    text-decoration: none;
+  }
+
+  .badge-doc {
+    background: rgba(0, 212, 170, 0.2);
+    color: var(--accent);
+    border: 1px solid rgba(0, 212, 170, 0.4);
+  }
+
+  .badge-doc:hover {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+  }
+
+  .badge-video {
+    background: rgba(255, 68, 102, 0.15);
+    color: var(--danger);
+    border: 1px solid rgba(255, 68, 102, 0.3);
+  }
+
+  .badge-video:hover {
+    background: var(--danger);
+    color: white;
+    border-color: var(--danger);
+  }
+
+  .badge-person {
+    background: rgba(108, 92, 231, 0.2);
+    color: #a29bfe;
+    border: 1px solid rgba(108, 92, 231, 0.4);
+  }
+
+  .badge-person:hover {
+    background: #6c5ce7;
+    color: white;
+    border-color: #6c5ce7;
+  }
+
+  .badge-incident {
+    background: rgba(253, 203, 110, 0.2);
+    color: #fdcb6e;
+    border: 1px solid rgba(253, 203, 110, 0.4);
+  }
+
+  .badge-incident:hover {
+    background: #fdcb6e;
+    color: var(--bg);
+    border-color: #fdcb6e;
+  }
+
+  .theme-badge {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.45rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-muted);
+  }
+
+  .video-popup-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.75);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+  }
+
+  .video-popup-overlay.is-open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .video-popup {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  }
+
+  .video-popup-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .video-popup-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .video-popup-close {
+    flex-shrink: 0;
+    width: 2.25rem;
+    height: 2.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .video-popup-close:hover {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+  }
+
+  .video-popup-body {
+    flex: 1;
+    min-height: 0;
+    padding: 1rem;
+  }
+
+  .video-popup-embed {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #000;
+  }
+
+  .video-popup-embed iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 640px) {
+    .timeline-item {
+      grid-template-columns: 70px 1fr;
+      gap: 1rem;
+    }
+
+    .timeline-marker::before {
+      right: -1.2rem;
+      width: 10px;
+      height: 10px;
+    }
+
+    .band-label {
+      font-size: 0.65rem;
+    }
+  }
+</style>

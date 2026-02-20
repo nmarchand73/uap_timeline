@@ -1,0 +1,370 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const explorerLinks = [
+  { href: '/timeline/', icon: '📅', title: 'Timeline 1945-2026', desc: 'Jalons chronologiques, documents, incidents' },
+  { href: '/themes/', icon: '🏷️', title: 'Thèmes', desc: '10 axes thématiques, filtres croisés' },
+  { href: '/documentary/', icon: '🎬', title: 'Documentaire', desc: 'The Age of Disclosure — 47 chapitres cliquables' },
+];
+
+const dataLinks = [
+  { href: '/documents/', icon: '📚', title: '9 Documents', desc: 'Vallée, Trinity, Skinwalkers, Dini, Elizondo, Maisonneuve, Mystery Wire' },
+  { href: '/people/', icon: '👤', title: '33 Personnes clés', desc: 'Elizondo, Vallée, Fravor, Grusch, Nolan...' },
+  { href: '/incidents/', icon: '📍', title: '33 Incidents clés', desc: 'Nimitz, Roswell, Malmstrom, Colares, Ariel School...' },
+  { href: '/programs/', icon: '🔬', title: 'Programmes', desc: 'AAWSAP, AATIP, AARO, Blue Book...' },
+];
+
+const sourceLinks = [
+  { href: '/dirds/', icon: '📄', title: '37 DIRD', desc: 'Rapports DIA (AAWSAP/AATIP) avec analyses ingénieurs' },
+  { href: '/videos/', icon: '▶️', title: 'Vidéothèque', desc: 'Vidéos YouTube classées par date et thème' },
+  { href: '/links/', icon: '🔗', title: 'Sources officielles', desc: 'CIA, DNI, GEIPAN, Congrès, NDAA...' },
+];
+---
+
+<BaseLayout title="Accueil" description="80 ans de mystère, 9 sources documentaires, 1 documentaire (47 chapitres), 33 personnes clés, 33 incidents majeurs, 37 DIRD.">
+  <article class="home">
+    <section class="hero">
+      <h1 class="hero-title">UFO Archive</h1>
+      <p class="hero-subtitle">Exploration de 9 documents et 1 documentaire — The Age of Disclosure</p>
+      <div class="hero-line" aria-hidden="true"></div>
+      <div class="hero-badges">
+        <span class="badge">80 ans</span>
+        <span class="badge">9 sources</span>
+        <span class="badge">33 personnes</span>
+        <span class="badge">33 incidents</span>
+        <span class="badge">37 DIRD</span>
+      </div>
+      <div class="hero-cta">
+        <a href="/documentary/" class="btn btn-primary">Voir le documentaire</a>
+        <a href="/timeline/" class="btn btn-secondary">Explorer la timeline</a>
+      </div>
+    </section>
+
+    <section class="stats">
+      <div class="stats-inner">
+        <div class="stat">
+          <span class="stat-value">80</span>
+          <span class="stat-label">ans de mystère</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">9</span>
+          <span class="stat-label">sources documentaires</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">33</span>
+          <span class="stat-label">personnes clés</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">33</span>
+          <span class="stat-label">incidents majeurs</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">47</span>
+          <span class="stat-label">chapitres documentaire</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="quick-links">
+      <div class="section-group">
+        <h2 class="section-label">Explorer</h2>
+        <div class="card-grid">
+          {explorerLinks.map((item) => (
+            <a href={item.href} class="card">
+              <span class="card-icon" aria-hidden="true">{item.icon}</span>
+              <h3 class="card-title">{item.title}</h3>
+              <p class="card-desc">{item.desc}</p>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <div class="section-group">
+        <h2 class="section-label">Données</h2>
+        <div class="card-grid">
+          {dataLinks.map((item) => (
+            <a href={item.href} class="card">
+              <span class="card-icon" aria-hidden="true">{item.icon}</span>
+              <h3 class="card-title">{item.title}</h3>
+              <p class="card-desc">{item.desc}</p>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <div class="section-group">
+        <h2 class="section-label">Sources</h2>
+        <div class="card-grid">
+          {sourceLinks.map((item) => (
+            <a href={item.href} class="card">
+              <span class="card-icon" aria-hidden="true">{item.icon}</span>
+              <h3 class="card-title">{item.title}</h3>
+              <p class="card-desc">{item.desc}</p>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  </article>
+</BaseLayout>
+
+<style>
+  .home {
+    padding-bottom: 3rem;
+  }
+
+  /* Hero */
+  .hero {
+    text-align: center;
+    padding: 4rem 0 3rem;
+  }
+
+  .hero-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    font-weight: 700;
+    margin: 0 0 0.75rem;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    max-width: 520px;
+    margin: 0 auto 1.5rem;
+    line-height: 1.6;
+  }
+
+  .hero-line {
+    width: 200px;
+    height: 2px;
+    margin: 0 auto 1.75rem;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+
+  .hero-badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    padding: 0.35rem 0.85rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    color: var(--accent);
+    letter-spacing: 0.02em;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    padding: 0.85rem 1.75rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .btn:hover {
+    text-decoration: none;
+    transform: translateY(-1px);
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent-dim));
+    color: var(--bg);
+    box-shadow: 0 4px 14px rgba(0, 212, 170, 0.25);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 6px 20px rgba(0, 212, 170, 0.35);
+  }
+
+  .btn-secondary {
+    border: 2px solid var(--accent);
+    color: var(--accent);
+  }
+
+  .btn-secondary:hover {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  /* Stats */
+  .stats {
+    margin: 2rem 0 3rem;
+  }
+
+  .stats-inner {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+
+  .stat {
+    text-align: center;
+    padding: 0.5rem;
+  }
+
+  .stat-value {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.2;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  /* Quick links */
+  .quick-links {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  .section-group {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+    margin: 0 0 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+
+  .card {
+    display: block;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+    transition: border-color 0.2s, transform 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .card:hover {
+    border-color: var(--accent);
+    text-decoration: none;
+    transform: translateY(-2px);
+  }
+
+  .card:hover::before {
+    opacity: 1;
+  }
+
+  .card-icon {
+    font-size: 1.75rem;
+    display: block;
+    margin-bottom: 0.6rem;
+  }
+
+  .card-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 0.4rem;
+    color: var(--text);
+  }
+
+  .card-desc {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.45;
+  }
+
+  @media (max-width: 768px) {
+    .hero {
+      padding: 3rem 0 2rem;
+    }
+
+    .hero-badges {
+      margin-bottom: 1.5rem;
+    }
+
+    .stats-inner {
+      grid-template-columns: repeat(2, 1fr);
+      padding: 1.25rem;
+    }
+
+    .stats-inner .stat:nth-child(5) {
+      grid-column: 1 / -1;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+    }
+
+    .card-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .hero-cta {
+      flex-direction: column;
+    }
+
+    .btn {
+      width: 100%;
+      text-align: center;
+    }
+
+    .stats-inner {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

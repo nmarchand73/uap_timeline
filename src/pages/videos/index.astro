@@ -1,0 +1,266 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+const videosPath = path.join(process.cwd(), 'content', 'videos.json');
+const allVideos = JSON.parse(fs.readFileSync(videosPath, 'utf-8'));
+const videos = allVideos.filter((v: { youtube_id: string | null }) => v.youtube_id);
+const refsWithUrl = allVideos.filter((v: { is_reference?: boolean; url?: string }) => v.is_reference && v.url);
+
+const THEME_LABELS: Record<string, string> = {
+  'combat-legislatif': 'Combat législatif',
+  'whistleblowers': 'Lanceurs d\'alerte',
+  'dissimulation': 'Dissimulation',
+  'aaro': 'AARO',
+  'observables-physique': 'Observables physiques',
+  'effets-biologiques': 'Effets biologiques',
+  'perspective-francaise': 'Perspective française',
+};
+
+function getSortKey(v: { event_date?: string | null }): string {
+  const d = v.event_date;
+  if (!d) return '9999-99';
+  const m = d.match(/^(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?/);
+  if (m) return `${m[1]}-${m[2] || '01'}-${m[3] || '01'}`;
+  const y = d.match(/(\d{4})/);
+  return y ? `${y[1]}-01-01` : '9999-99';
+}
+
+const sortedVideos = [...videos].sort((a, b) => getSortKey(a).localeCompare(getSortKey(b), undefined, { numeric: true }));
+
+const byYear = new Map<string, typeof videos>();
+for (const v of sortedVideos) {
+  const d = v.event_date;
+  const year = d ? (d.match(/\d{4}/)?.[0] ?? 'Sans date') : 'Sans date';
+  if (!byYear.has(year)) byYear.set(year, []);
+  byYear.get(year)!.push(v);
+}
+
+const allThemes = [...new Set(videos.flatMap((v: { themes?: string[] }) => v.themes || []))].sort();
+const byTheme = new Map<string, typeof videos>();
+for (const theme of allThemes) {
+  byTheme.set(theme, videos.filter((v: { themes?: string[] }) => v.themes?.includes(theme)));
+}
+
+const HEARING_IDS = new Set(['V10', 'V11', 'V5', 'V8', 'V9', 'V12']);
+---
+
+<BaseLayout title="Vidéothèque" description="Vidéos YouTube classées par date et thème (Maisonneuve, Sol Foundation, NewsNation, Joe Rogan).">
+  <h1>Vidéothèque</h1>
+  <p class="intro">Vidéos YouTube classées par date et thème.</p>
+
+  <section>
+    <h2>Par date</h2>
+    {Array.from(byYear.entries()).sort(([a], [b]) => (a === 'Sans date' ? 1 : b === 'Sans date' ? -1 : b.localeCompare(a, undefined, { numeric: true }))).map(([year, list]) => (
+      <div class="year-group">
+        <h3 class="year-heading">{year}</h3>
+        <div class="videos-grid">
+          {list.map((v: { id: string; youtube_id: string; youtube_playlist?: string; title: string; description: string; event_date?: string | null; source_chapter?: string | null; themes?: string[] }) => {
+            const embedSrc = v.youtube_playlist
+              ? `https://www.youtube.com/embed/videoseries?list=${v.youtube_playlist}`
+              : `https://www.youtube.com/embed/${v.youtube_id}`;
+            const meta = [v.event_date, v.source_chapter].filter(Boolean).join(' — ');
+            return (
+            <div class="video-card" id={v.id}>
+              <div class="embed-wrapper">
+                <iframe
+                  src={embedSrc}
+                  title={v.title}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen
+                />
+              </div>
+              <h4>{v.title}</h4>
+              {meta && <p class="meta">{meta}</p>}
+              {v.themes?.length ? (
+                <div class="theme-badges">
+                  {v.themes.map((t) => <span class="badge">{THEME_LABELS[t] || t}</span>)}
+                </div>
+              ) : null}
+              {HEARING_IDS.has(v.id) && (
+                <a href={`/timeline/auditions/#hearing-${v.id}`} class="hearing-link">⚖️ Voir l'audition au Congrès</a>
+              )}
+              <p class="description">{v.description}</p>
+            </div>
+          );})}
+        </div>
+      </div>
+    ))}
+  </section>
+
+  <section>
+    <h2>Par thème</h2>
+    {allThemes.map((theme) => (
+      <div class="theme-group">
+        <h3 class="theme-heading">{THEME_LABELS[theme] || theme}</h3>
+        <ul class="theme-video-list">
+          {byTheme.get(theme)!.map((v: { id: string; title: string; event_date?: string | null }) => (
+            <li>
+              <a href={`#${v.id}`}>{v.title}</a>
+              {v.event_date ? <span class="date"> — {v.event_date}</span> : null}
+              {HEARING_IDS.has(v.id) && <a href={`/timeline/auditions/#hearing-${v.id}`} class="hearing-link-inline" title="Voir l'audition"> ⚖️</a>}
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </section>
+
+  {refsWithUrl.length > 0 && (
+    <section>
+      <h2>Références complémentaires (liens)</h2>
+      <ul class="refs-list">
+        {refsWithUrl.map((r: { title: string; description: string; url: string }) => (
+          <li>
+            <a href={r.url} target="_blank" rel="noopener noreferrer"><strong>{r.title}</strong></a>
+            <span class="desc"> — {r.description}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .intro {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+  }
+
+  section {
+    margin-bottom: 3rem;
+  }
+
+  .videos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .video-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .embed-wrapper {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+  }
+
+  .embed-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .year-group, .theme-group {
+    margin-bottom: 2rem;
+  }
+
+  .year-heading, .theme-heading {
+    font-size: 1.1rem;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+  }
+
+  .video-card h4 {
+    padding: 1rem 1rem 0;
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  .theme-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    padding: 0.25rem 1rem 0;
+  }
+
+  .theme-badges .badge {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.4rem;
+    background: var(--bg-elevated);
+    border-radius: 4px;
+    color: var(--text-muted);
+  }
+
+  .hearing-link {
+    display: inline-block;
+    margin: 0.5rem 1rem 0;
+    font-size: 0.8rem;
+    color: var(--accent);
+    text-decoration: none;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid rgba(0, 212, 170, 0.4);
+    border-radius: 6px;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .hearing-link:hover {
+    background: rgba(0, 212, 170, 0.15);
+    color: var(--accent-dim);
+  }
+
+  .theme-video-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .theme-video-list li {
+    padding: 0.35rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hearing-link-inline {
+    margin-left: 0.25rem;
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .hearing-link-inline:hover {
+    color: var(--accent-dim);
+  }
+
+  .theme-video-list .date {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .meta {
+    padding: 0 1rem;
+    font-size: 0.8rem;
+    color: var(--accent);
+  }
+
+  .description {
+    padding: 0.5rem 1rem 1rem;
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+  }
+
+  .refs-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .refs-list li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .desc {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+</style>

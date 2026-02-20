@@ -1,0 +1,37 @@
+[
+  {
+    "id": "FR1",
+    "event_date": "2023-10-11",
+    "title": "Réponse du ministre Roland Lescure sur les PAN",
+    "description": "Question la plus votée sur la plateforme Agora (2500+ soutiens). Le ministre délégué à l'Industrie répond sur la position de la France concernant les Phénomènes Aérospatiaux Non Identifiés.",
+    "institution": "Gouvernement — Plateforme Agora",
+    "key_points": [
+      "PAN distincts des OVNI (sous-catégorie)",
+      "La France « en avance » sur la transparence vs États-Unis",
+      "GEIPAN (CNES) cité comme structure de référence"
+    ],
+    "url": "https://www.agora.gouv.fr/",
+    "geipan_url": "https://cnes-geipan.fr/",
+    "geipan_links": [
+      {"label": "Site GEIPAN", "url": "https://cnes-geipan.fr/"},
+      {"label": "Statistiques", "url": "https://cnes-geipan.fr/fr/stats"},
+      {"label": "Recherche de cas", "url": "https://cnes-geipan.fr/fr/recherche/cas"},
+      {"label": "Mission & méthodologie", "url": "https://cnes-geipan.fr/fr/node/58792"}
+    ]
+  },
+  {
+    "id": "FR2",
+    "event_date": "2025-09-17",
+    "title": "Pétition pour la divulgation OVNI/PAN",
+    "description": "Initiative citoyenne déposée sur la plateforme des pétitions de l'Assemblée nationale. Demande déclassification, commission parlementaire permanente et programmes de recherche.",
+    "institution": "Assemblée nationale — Pétitions",
+    "key_points": [
+      "Déclassification des documents et données PAN",
+      "Commission parlementaire permanente de suivi",
+      "Programmes de recherche indépendants, collaboration internationale",
+      "100 000 signatures requises pour examen"
+    ],
+    "url": "https://petitions.assemblee-nationale.fr/initiatives/i-4026",
+    "signatures_required": 100000
+  }
+]

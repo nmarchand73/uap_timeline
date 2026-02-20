@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+const docsPath = path.join(process.cwd(), 'content', 'docs-meta.json');
+const allDocs = JSON.parse(fs.readFileSync(docsPath, 'utf-8'));
+const docs = allDocs.filter((d: { type: string }) => d.type !== 'documentary');
+---
+
+<BaseLayout title="Documents" description="8 documents : Vallée, Trinity, Skinwalkers, Dini, Elizondo, Maisonneuve, Mystery Wire.">
+  <h1>8 Documents</h1>
+  <p class="intro">Fiches des 8 sources principales avec cross-références.</p>
+
+  <div class="docs-grid">
+    {docs.map((doc: { slug: string; title: string; authors: string[]; year: number; language: string; type: string; themes: string[] }) => (
+      <a href={`/documents/${doc.slug}/`} class="doc-card">
+        <h3>{doc.title}</h3>
+        <p class="meta">{doc.authors.join(', ')} — {doc.year} ({doc.language})</p>
+        <div class="themes">
+          {doc.themes?.slice(0, 3).map((t: string) => (
+            <span class="badge">{t.replace(/-/g, ' ')}</span>
+          ))}
+        </div>
+      </a>
+    ))}
+  </div>
+</BaseLayout>
+
+<style>
+  .intro {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+  }
+
+  .docs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .doc-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: border-color 0.2s;
+  }
+
+  .doc-card:hover {
+    border-color: var(--accent);
+    text-decoration: none;
+  }
+
+  .doc-card h3 {
+    font-size: 1.125rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .meta {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .themes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .badge {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.4rem;
+    background: var(--bg-elevated);
+    border-radius: 4px;
+    color: var(--text-muted);
+  }
+</style>

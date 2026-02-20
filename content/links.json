@@ -1,0 +1,333 @@
+[
+  {
+    "url": "https://cnes-geipan.fr/",
+    "title": "GEIPAN — Site officiel (CNES)",
+    "type": "official",
+    "source_doc": "ovnis-lumiere-dossiers-dini",
+    "date": null,
+    "themes": ["perspective-francaise"]
+  },
+  {
+    "url": "https://cnes-geipan.fr/fr/stats",
+    "title": "GEIPAN — Statistiques des cas",
+    "type": "official",
+    "source_doc": null,
+    "date": null,
+    "themes": ["perspective-francaise"]
+  },
+  {
+    "url": "https://cnes-geipan.fr/fr/recherche/cas",
+    "title": "GEIPAN — Recherche de cas (base de données)",
+    "type": "archive",
+    "source_doc": null,
+    "date": null,
+    "themes": ["perspective-francaise"]
+  },
+  {
+    "url": "https://cnes-geipan.fr/fr/qu-ai-je-vu/etape-1",
+    "title": "GEIPAN — Témoigner d'une observation",
+    "type": "official",
+    "source_doc": null,
+    "date": null,
+    "themes": ["perspective-francaise"]
+  },
+  {
+    "url": "https://cnes-geipan.fr/fr/node/58792",
+    "title": "GEIPAN — Mission et méthodologie (PAN A/B/C/D)",
+    "type": "official",
+    "source_doc": null,
+    "date": null,
+    "themes": ["perspective-francaise"]
+  },
+  {
+    "url": "https://www.cnes-geipan.fr/sites/default/files/Cometa_0.pdf",
+    "title": "Rapport COMETA (CNES/GEIPAN)",
+    "type": "pdf",
+    "source_doc": "ovnis-lumiere-dossiers-dini",
+    "date": "1999",
+    "themes": [
+      "perspective-francaise"
+    ]
+  },
+  {
+    "url": "https://www.cia.gov/readingroom/",
+    "title": "CIA Reading Room (directive USAF 1958)",
+    "type": "archive",
+    "source_doc": "mystery-wire-archives",
+    "date": null,
+    "themes": [
+      "dissimulation"
+    ]
+  },
+  {
+    "url": "https://www.nicap.org/bolender.pdf",
+    "title": "Memo Bolender 1969 (NICAP)",
+    "type": "pdf",
+    "source_doc": "ovnis-enquete-declassifiee",
+    "date": "1969",
+    "themes": [
+      "dissimulation"
+    ]
+  },
+  {
+    "url": "https://www.state.gov/",
+    "title": "Traité nucléaire US-URSS 1971 (state.gov)",
+    "type": "official",
+    "source_doc": "mystery-wire-archives",
+    "date": "1971",
+    "themes": [
+      "lien-nucleaire"
+    ]
+  },
+  {
+    "url": "https://www.dni.gov/files/ODNI/documents/assessments/Preliminary-Assessment-UAP-20210625.pdf",
+    "title": "DNI Preliminary Assessment UAP 2021",
+    "type": "pdf",
+    "source_doc": "ovnis-enquete-declassifiee",
+    "date": "2021-06",
+    "themes": [
+      "combat-legislatif"
+    ]
+  },
+  {
+    "url": "https://www.dni.gov/files/ODNI/documents/assessments/Unclassified-2022-Annual-Report-UAP.pdf",
+    "title": "DNI Annual Report UAP 2022",
+    "type": "pdf",
+    "source_doc": "ovnis-enquete-declassifiee",
+    "date": "2022",
+    "themes": [
+      "combat-legislatif"
+    ]
+  },
+  {
+    "url": "https://www.dni.gov/files/ODNI/documents/assessments/FY2023-Consolidated-Annual-Report-UAP-Oct2023.pdf",
+    "title": "DNI/DoD Consolidated Annual Report UAP 2023",
+    "type": "pdf",
+    "source_doc": "ovnis-enquete-declassifiee",
+    "date": "2023-10",
+    "themes": [
+      "combat-legislatif"
+    ]
+  },
+  {
+    "url": "https://www.dni.gov/files/ODNI/documents/assessments/DOD-AARO-Consolidated-Annual-Report-on-UAP-Nov2024.pdf",
+    "title": "DNI/DoD Consolidated Annual Report UAP 2024",
+    "type": "pdf",
+    "source_doc": "ovnis-enquete-declassifiee",
+    "date": "2024-11",
+    "themes": [
+      "combat-legislatif"
+    ]
+  },
+  {
+    "url": "https://www.aaro.mil/Portals/136/PDFs/AARO_Mission_Brief_2025.pdf",
+    "title": "AARO Mission Brief 2025",
+    "type": "pdf",
+    "source_doc": null,
+    "date": "2025",
+    "themes": [
+      "combat-legislatif"
+    ]
+  },
+  {
+    "url": "https://www.aaro.mil/Portals/136/PDFs/Information%20Papers/AARO_Declassification_Info_Paper_2025.pdf",
+    "title": "AARO Declassification Info Paper 2025",
+    "type": "pdf",
+    "source_doc": null,
+    "date": "2025",
+    "themes": [
+      "combat-legislatif"
+    ]
+  },
+  {
+    "url": "https://www.aaro.mil/Portals/136/PDFs/AARO-Historical-Record-Report-Volume-1-2024.pdf",
+    "title": "AARO Historical Report Vol.1 mars 2024",
+    "type": "pdf",
+    "source_doc": "ovnis-enquete-declassifiee",
+    "date": "2024-03",
+    "themes": [
+      "dissimulation"
+    ]
+  },
+  {
+    "url": "https://www.defense.gov/News/Releases/Release/Article/2165713/",
+    "title": "Authentification vidéos Navy (Defense.gov avr. 2020)",
+    "type": "official",
+    "source_doc": "ovnis-enquete-declassifiee",
+    "date": "2020-04",
+    "themes": [
+      "dissimulation"
+    ]
+  },
+  {
+    "url": "https://www.theblackvault.com/",
+    "title": "Navy 78 vidéos UAP (Black Vault)",
+    "type": "archive",
+    "source_doc": "mystery-wire-archives",
+    "date": null,
+    "themes": [
+      "dissimulation"
+    ]
+  },
+  {
+    "url": "https://www.dni.gov/index.php/ic-legal-reference-book/ic-legal-reference-book-foia",
+    "title": "Immaculate Constellation (DNI FOIA)",
+    "type": "foia",
+    "source_doc": "ovnis-enquete-declassifiee",
+    "date": "2024",
+    "themes": [
+      "combat-legislatif"
+    ]
+  },
+  {
+    "url": "https://www.congress.gov/bill/118th-congress/senate-bill/2226",
+    "title": "UAP Disclosure Act (Schumer/Rounds)",
+    "type": "legislation",
+    "source_doc": "imminent-elizondo",
+    "date": "2023",
+    "themes": [
+      "combat-legislatif"
+    ]
+  },
+  {
+    "url": "https://www.congress.gov/",
+    "title": "Documents audition Congrès nov. 2024",
+    "type": "official",
+    "source_doc": "ovnis-enquete-declassifiee",
+    "date": "2024-11",
+    "themes": [
+      "combat-legislatif"
+    ]
+  },
+  {
+    "url": "https://thedebrief.org/",
+    "title": "The Debrief — révélations Grusch juin 2023",
+    "type": "media",
+    "source_doc": "imminent-elizondo",
+    "date": "2023-06",
+    "themes": [
+      "whistleblowers"
+    ]
+  },
+  {
+    "url": "https://thedebrief.org/",
+    "title": "The Debrief — critique AARO (Mellon)",
+    "type": "media",
+    "source_doc": "ovnis-enquete-declassifiee",
+    "date": "2024",
+    "themes": [
+      "dissimulation"
+    ]
+  },
+  {
+    "url": "https://conversationswithtyler.com/",
+    "title": "Conversations with Tyler — interview Brennan",
+    "type": "media",
+    "source_doc": "ovnis-enquete-declassifiee",
+    "date": null,
+    "themes": [
+      "whistleblowers"
+    ]
+  },
+  {
+    "url": "https://sentinelnews.net/",
+    "title": "Sentinel News — Wikipedia under influence",
+    "type": "media",
+    "source_doc": "ovnis-enquete-declassifiee",
+    "date": null,
+    "themes": [
+      "dissimulation"
+    ]
+  },
+  {
+    "url": "https://www.theblackvault.com/documentarchive/the-advanced-aviation-threat-identification-program-aatip-dird-report-research/",
+    "title": "DIRD — Archive complet Black Vault (37 PDF + ZIP)",
+    "type": "archive",
+    "source_doc": "imminent-elizondo",
+    "date": "2008-2010",
+    "themes": [
+      "aawsap-aatip",
+      "reverse-engineering"
+    ]
+  },
+  {
+    "url": "https://irp.fas.org/dia/aatip-list.pdf",
+    "title": "Liste DIA des produits AATIP (FAS)",
+    "type": "pdf",
+    "source_doc": "mystery-wire-archives",
+    "date": "2018",
+    "themes": [
+      "aawsap-aatip"
+    ]
+  },
+  {
+    "url": "https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title50-section3373b&num=0&edition=prelim",
+    "title": "UAP language — NDAA 2023 (50 USC §3373b)",
+    "type": "legislation",
+    "source_doc": null,
+    "date": "2022-12",
+    "themes": [
+      "combat-legislatif"
+    ]
+  },
+  {
+    "url": "https://www.dia.mil/FOIA/FOIA-Electronic-Reading-Room/FileId/170015/",
+    "title": "Harry Reid — AATIP Special Access Protection (DIA FOIA)",
+    "type": "foia",
+    "source_doc": null,
+    "date": null,
+    "themes": [
+      "aawsap-aatip"
+    ]
+  },
+  {
+    "url": "https://www.intelligence.senate.gov/publications/intelligence-authorization-act-fiscal-year-2021",
+    "title": "UAP language — Intelligence Authorization Act FY2021 (Covid bill)",
+    "type": "legislation",
+    "source_doc": null,
+    "date": "2020-12",
+    "themes": [
+      "combat-legislatif"
+    ]
+  },
+  {
+    "url": "https://www.congress.gov/117/meeting/house/114761/documents/HHRG-117-IG05-20220517-SD001.pdf",
+    "title": "Wilson/Davis memo (Congress.gov)",
+    "type": "pdf",
+    "source_doc": null,
+    "date": "2022-05",
+    "themes": [
+      "dissimulation"
+    ]
+  },
+  {
+    "url": "https://media.defense.gov/2024/Mar/08/2003409233/-1/-1/0/DOPSR-CLEARED-508-COMPLIANT-HRRV1-08-MAR-2024-FINAL.PDF",
+    "title": "Pentagon UAP Report — Historical Record Vol.1 (mars 2024)",
+    "type": "pdf",
+    "source_doc": null,
+    "date": "2024-03",
+    "themes": [
+      "combat-legislatif"
+    ]
+  },
+  {
+    "url": "https://www.govinfo.gov/content/pkg/PLAW-118publ31/uslm/PLAW-118publ31.xml#d7546e80896",
+    "title": "UAP language — NDAA 2024",
+    "type": "legislation",
+    "source_doc": null,
+    "date": "2023-12",
+    "themes": [
+      "combat-legislatif"
+    ]
+  },
+  {
+    "url": "https://www.researchgate.net/profile/Harold-Puthoff/publication/363346030_ULTRATERRESTRIAL_MODELS/links/6318a625873eca0c006c4d4e/ULTRATERRESTRIAL-MODELS.pdf?origin=publication_detail",
+    "title": "Hal Puthoff — Ultraterrestrial Models (ResearchGate)",
+    "type": "pdf",
+    "source_doc": null,
+    "date": "2022",
+    "themes": [
+      "aawsap-aatip"
+    ]
+  }
+]

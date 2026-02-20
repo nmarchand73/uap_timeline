@@ -7,6 +7,7 @@ const videosPath = path.join(process.cwd(), 'content', 'videos.json');
 const allVideos = JSON.parse(fs.readFileSync(videosPath, 'utf-8'));
 const videos = allVideos.filter((v: { youtube_id: string | null }) => v.youtube_id);
 const refsWithUrl = allVideos.filter((v: { is_reference?: boolean; url?: string }) => v.is_reference && v.url);
+const playlists = allVideos.filter((v: { is_playlist?: boolean; youtube_playlist?: string }) => v.is_playlist && v.youtube_playlist);
 
 const THEME_LABELS: Record<string, string> = {
   'combat-legislatif': 'Combat législatif',
@@ -49,6 +50,29 @@ const HEARING_IDS = new Set(['V10', 'V11', 'V5', 'V8', 'V9', 'V12']);
 <BaseLayout title="Vidéothèque" description="Vidéos YouTube classées par date et thème (Maisonneuve, Sol Foundation, NewsNation, Joe Rogan).">
   <h1>Vidéothèque</h1>
   <p class="intro">Vidéos YouTube classées par date et thème.</p>
+
+  {playlists.length > 0 && (
+    <section class="playlists-section">
+      <h2>Playlists</h2>
+      <div class="playlists-grid">
+        {playlists.map((p: { id: string; youtube_playlist: string; title: string; description: string }) => (
+          <div class="playlist-card" id={p.id}>
+            <div class="embed-wrapper">
+              <iframe
+                src={`https://www.youtube.com/embed/videoseries?list=${p.youtube_playlist}`}
+                title={p.title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              />
+            </div>
+            <h3 class="playlist-title">{p.title}</h3>
+            <p class="playlist-desc">{p.description}</p>
+            <a href={`https://www.youtube.com/playlist?list=${p.youtube_playlist}`} target="_blank" rel="noopener noreferrer" class="playlist-link">Voir la playlist sur YouTube →</a>
+          </div>
+        ))}
+      </div>
+    </section>
+  )}
 
   <section>
     <h2>Par date</h2>
@@ -262,5 +286,52 @@ const HEARING_IDS = new Set(['V10', 'V11', 'V5', 'V8', 'V9', 'V12']);
   .desc {
     color: var(--text-muted);
     font-size: 0.9rem;
+  }
+
+  .playlists-section {
+    margin-bottom: 3rem;
+  }
+
+  .playlists-section h2 {
+    margin-bottom: 1rem;
+  }
+
+  .playlists-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    max-width: 900px;
+  }
+
+  .playlist-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .playlist-title {
+    padding: 1rem 1rem 0;
+    font-size: 1.1rem;
+    margin: 0;
+    color: var(--accent);
+  }
+
+  .playlist-desc {
+    padding: 0.5rem 1rem;
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+  }
+
+  .playlist-link {
+    display: inline-block;
+    padding: 0.5rem 1rem 1rem;
+    font-size: 0.9rem;
+    color: var(--accent);
+  }
+
+  .playlist-link:hover {
+    text-decoration: underline;
   }
 </style>

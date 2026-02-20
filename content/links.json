@@ -329,5 +329,14 @@
     "themes": [
       "aawsap-aatip"
     ]
+  },
+  {
+    "url": "https://www.weaponizedpodcast.com/",
+    "title": "WEAPONIZED — Jeremy Corbell & George Knapp",
+    "type": "podcast",
+    "source_doc": null,
+    "date": null,
+    "themes": ["whistleblowers"],
+    "description": "Podcast UAP, paranormal, science. Épisodes visuels sur le site et YouTube @JeremyCorbell."
   }
 ]

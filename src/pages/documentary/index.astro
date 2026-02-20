@@ -3,6 +3,11 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import fs from 'node:fs';
 import path from 'node:path';
 
+/** Référence unique : documentaire toujours en local (public/video/). Pas de stream externe. */
+const DOC_VIDEO_FILE = 'The.Age.Of.Disclosure.2025.mkv';
+const DOC_VIDEO_PATH = `/video/${DOC_VIDEO_FILE}`;
+const DOC_SUBS_FILE = 'The.Age.Of.Disclosure.2025.vtt';
+
 const chaptersPath = path.join(process.cwd(), 'content', 'documentary-chapters.json');
 const chapters = JSON.parse(fs.readFileSync(chaptersPath, 'utf-8'));
 const docsPath = path.join(process.cwd(), 'content', 'docs-meta.json');
@@ -18,12 +23,12 @@ const subtitlesIndex = fs.existsSync(subtitlesPath) ? JSON.parse(fs.readFileSync
   <div class="player-section">
     <div class="video-wrapper">
       <video id="doc-video" controls preload="metadata" class="video-player" >
-        <source src="/video/The.Age.Of.Disclosure.2025.mkv" type="video/x-matroska" />
-        <track kind="subtitles" src="/video/The.Age.Of.Disclosure.2025.vtt" srclang="fr" label="Français" default />
+        <source src={DOC_VIDEO_PATH} type="video/x-matroska" />
+        <track kind="subtitles" src={`/video/${DOC_SUBS_FILE}`} srclang="fr" label="Français" default />
         Votre navigateur ne supporte pas la vidéo HTML5.
       </video>
       <div id="video-error" class="video-error" hidden>
-        <p>Vidéo non trouvée. Placez <code>The.Age.Of.Disclosure.2025.mkv</code> dans <code>public/video/</code>.</p>
+        <p>Vidéo non trouvée. Placez <code>{DOC_VIDEO_FILE}</code> dans <code>public/video/</code>.</p>
         <p>Les chapitres restent cliquables pour naviguer une fois la vidéo chargée.</p>
       </div>
     </div>
@@ -78,7 +83,7 @@ const subtitlesIndex = fs.existsSync(subtitlesPath) ? JSON.parse(fs.readFileSync
     <div id="subtitle-results" class="subtitle-results"></div>
   </section>
 
-  <p class="note">Si la vidéo n'est pas disponible, placez le fichier <code>The.Age.Of.Disclosure.2025.mkv</code> dans <code>public/video/</code>. Sous-titres : <code>npm run srt-to-vtt</code>. Index recherche : <code>npm run subtitles-index</code>.</p>
+  <p class="note">Le documentaire utilise toujours le fichier local <code>{DOC_VIDEO_FILE}</code> dans <code>public/video/</code> (pas de stream externe). Sous-titres : <code>npm run srt-to-vtt</code>. Index recherche : <code>npm run subtitles-index</code>.</p>
 </BaseLayout>
 
 <script type="module">

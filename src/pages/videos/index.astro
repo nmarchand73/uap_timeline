@@ -8,6 +8,7 @@ const allVideos = JSON.parse(fs.readFileSync(videosPath, 'utf-8'));
 const videos = allVideos.filter((v: { youtube_id: string | null }) => v.youtube_id);
 const refsWithUrl = allVideos.filter((v: { is_reference?: boolean; url?: string }) => v.is_reference && v.url);
 const playlists = allVideos.filter((v: { is_playlist?: boolean; youtube_playlist?: string }) => v.is_playlist && v.youtube_playlist);
+const videosWithAnalysis = allVideos.filter((v: { youtube_id?: string | null; analysis_url?: string }) => v.youtube_id && v.analysis_url);
 
 const THEME_LABELS: Record<string, string> = {
   'combat-legislatif': 'Combat législatif',
@@ -61,6 +62,33 @@ const HEARING_IDS = new Set(['V10', 'V11', 'V5', 'V8', 'V9', 'V12']);
           </li>
         ))}
       </ul>
+    </section>
+  )}
+
+  {videosWithAnalysis.length > 0 && (
+    <section class="analysis-section">
+      <h2>Vidéos UAP — analyses et cas expliqués</h2>
+      <p class="analysis-intro">Vidéos souvent présentées comme UAP, avec analyses (debunk, identification) en lien. <a href="/metabunk/">→ Tous les fils Metabunk (US Military & Government, UFOs and Aliens)</a></p>
+      <div class="videos-grid">
+        {videosWithAnalysis.map((v: { id: string; youtube_id: string; title: string; description: string; event_date?: string | null; analysis_url?: string; analysis_label?: string }) => (
+          <div class="video-card" id={v.id}>
+            <div class="embed-wrapper">
+              <iframe
+                src={`https://www.youtube.com/embed/${v.youtube_id}`}
+                title={v.title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              />
+            </div>
+            <h4>{v.title}</h4>
+            {v.event_date && <p class="meta">{v.event_date}</p>}
+            <p class="description">{v.description}</p>
+            {v.analysis_url && (
+              <a href={v.analysis_url} target="_blank" rel="noopener noreferrer" class="analysis-link">→ Analyse ({v.analysis_label || 'lien'})</a>
+            )}
+          </div>
+        ))}
+      </div>
     </section>
   )}
 
@@ -308,5 +336,34 @@ const HEARING_IDS = new Set(['V10', 'V11', 'V5', 'V8', 'V9', 'V12']);
 
   .playlist-line:hover {
     text-decoration: underline;
+  }
+
+  .analysis-section {
+    margin-bottom: 3rem;
+  }
+
+  .analysis-section h2 {
+    margin-bottom: 0.5rem;
+  }
+
+  .analysis-intro {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin: 0 0 1rem;
+  }
+
+  .analysis-link {
+    display: inline-block;
+    margin-top: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.85rem;
+    color: var(--accent);
+    border: 1px solid rgba(0, 212, 170, 0.4);
+    border-radius: 6px;
+  }
+
+  .analysis-link:hover {
+    background: rgba(0, 212, 170, 0.1);
+    text-decoration: none;
   }
 </style>

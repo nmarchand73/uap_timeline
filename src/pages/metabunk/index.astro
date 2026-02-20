@@ -1,0 +1,278 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+const militaryPath = path.join(process.cwd(), 'content', 'metabunk-ufo-military-government-threads.json');
+const aliensPath = path.join(process.cwd(), 'content', 'metabunk-ufos-and-aliens-threads.json');
+const militaryThreads: { title: string; url: string }[] = JSON.parse(fs.readFileSync(militaryPath, 'utf-8'));
+const aliensThreads: { title: string; url: string }[] = JSON.parse(fs.readFileSync(aliensPath, 'utf-8'));
+
+const forumMilitaryUrl = 'https://www.metabunk.org/forums/ufo-reports-from-the-us-military-and-government.60/';
+const forumAliensUrl = 'https://www.metabunk.org/forums/ufos-and-aliens.10/';
+---
+
+<BaseLayout
+  title="Analyses Metabunk — US Military & UFOs and Aliens"
+  description="Liste des fils des forums Metabunk « UFO Reports from the US Military and Government » et « UFOs and Aliens » : vidéos Navy, AARO, Tic Tac, Calvine, Ariel School, analyses et debunk."
+>
+  <h1>Analyses Metabunk</h1>
+  <p class="intro">
+    Fils des forums <a href={forumMilitaryUrl} target="_blank" rel="noopener noreferrer">UFO Reports from the US Military and Government</a> et
+    <a href={forumAliensUrl} target="_blank" rel="noopener noreferrer">UFOs and Aliens</a> (Metabunk) : vidéos Navy, AARO, Nimitz/Tic Tac, Gimbal, Go Fast, Calvine, Ariel School, Rendlesham, analyses et debunk.
+  </p>
+
+  <div class="tabs" role="tablist" aria-label="Choix du forum">
+    <button type="button" role="tab" id="tab-military" aria-selected="true" aria-controls="panel-military" class="tab active" data-forum="military">
+      US Military & Government
+    </button>
+    <button type="button" role="tab" id="tab-aliens" aria-selected="false" aria-controls="panel-aliens" class="tab" data-forum="aliens">
+      UFOs and Aliens
+    </button>
+  </div>
+
+  <div class="toolbar">
+    <label for="metabunk-search" class="sr-only">Rechercher dans les titres</label>
+    <input
+      type="search"
+      id="metabunk-search"
+      class="search-input"
+      placeholder="Rechercher un fil…"
+      aria-label="Rechercher dans les titres des fils"
+    />
+    <span class="count" id="thread-count" aria-live="polite">{militaryThreads.length} fils</span>
+  </div>
+
+  <section id="panel-military" role="tabpanel" aria-labelledby="tab-military" class="threads-panel" data-forum="military" hidden={false}>
+    <ul class="threads-list" id="threads-list-military">
+      {militaryThreads.map((t) => (
+        <li class="thread-item" data-title={t.title.toLowerCase()}>
+          <a href={t.url} target="_blank" rel="noopener noreferrer" class="thread-link">
+            {t.title}
+          </a>
+        </li>
+      ))}
+    </ul>
+    <p class="outro">
+      <a href={forumMilitaryUrl} target="_blank" rel="noopener noreferrer">→ Voir le forum US Military & Government sur Metabunk</a>
+    </p>
+  </section>
+
+  <section id="panel-aliens" role="tabpanel" aria-labelledby="tab-aliens" class="threads-panel" data-forum="aliens" hidden={true}>
+    <ul class="threads-list" id="threads-list-aliens">
+      {aliensThreads.map((t) => (
+        <li class="thread-item" data-title={t.title.toLowerCase()}>
+          <a href={t.url} target="_blank" rel="noopener noreferrer" class="thread-link">
+            {t.title}
+          </a>
+        </li>
+      ))}
+    </ul>
+    <p class="outro">
+      <a href={forumAliensUrl} target="_blank" rel="noopener noreferrer">→ Voir le forum UFOs and Aliens sur Metabunk</a>
+    </p>
+  </section>
+</BaseLayout>
+
+<script>
+  const search = document.getElementById('metabunk-search') as HTMLInputElement | null;
+  const countEl = document.getElementById('thread-count');
+  const tabMilitary = document.getElementById('tab-military');
+  const tabAliens = document.getElementById('tab-aliens');
+  const panelMilitary = document.getElementById('panel-military');
+  const panelAliens = document.getElementById('panel-aliens');
+  const listMilitary = document.getElementById('threads-list-military');
+  const listAliens = document.getElementById('threads-list-aliens');
+
+  function getVisiblePanel(): { panel: HTMLElement; list: HTMLElement; total: number } | null {
+    if (panelMilitary && !panelMilitary.hidden && listMilitary) {
+      return { panel: panelMilitary, list: listMilitary, total: listMilitary.querySelectorAll('.thread-item').length };
+    }
+    if (panelAliens && !panelAliens.hidden && listAliens) {
+      return { panel: panelAliens, list: listAliens, total: listAliens.querySelectorAll('.thread-item').length };
+    }
+    return null;
+  }
+
+  function applyFilter() {
+    if (!search || !countEl) return;
+    const q = search.value.trim().toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
+    const state = getVisiblePanel();
+    if (!state) return;
+    const items = Array.from(state.list.querySelectorAll<HTMLElement>('.thread-item'));
+    let visible = 0;
+    items.forEach((li) => {
+      const title = (li.getAttribute('data-title') || '').normalize('NFD').replace(/\p{Diacritic}/gu, '');
+      const match = !q || title.includes(q);
+      li.style.display = match ? '' : 'none';
+      if (match) visible++;
+    });
+    countEl.textContent = visible === state.total ? `${state.total} fils` : `${visible} / ${state.total} fils`;
+  }
+
+  function switchForum(forum: 'military' | 'aliens') {
+    const isMilitary = forum === 'military';
+    if (panelMilitary) panelMilitary.hidden = !isMilitary;
+    if (panelAliens) panelAliens.hidden = isMilitary;
+    if (tabMilitary) {
+      tabMilitary.classList.toggle('active', isMilitary);
+      tabMilitary.setAttribute('aria-selected', String(isMilitary));
+    }
+    if (tabAliens) {
+      tabAliens.classList.toggle('active', !isMilitary);
+      tabAliens.setAttribute('aria-selected', String(!isMilitary));
+    }
+    applyFilter();
+  }
+
+  if (tabMilitary) tabMilitary.addEventListener('click', () => switchForum('military'));
+  if (tabAliens) tabAliens.addEventListener('click', () => switchForum('aliens'));
+  if (search) search.addEventListener('input', applyFilter);
+</script>
+
+<style>
+  .intro {
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+
+  .intro a {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 0.25rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .tab {
+    padding: 0.5rem 1rem;
+    font-size: 0.9375rem;
+    font-family: inherit;
+    font-weight: 500;
+    color: var(--text-muted);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: color 0.15s, background 0.15s, border-color 0.15s;
+  }
+
+  .tab:hover {
+    color: var(--text);
+    background: var(--bg);
+  }
+
+  .tab.active {
+    color: var(--text);
+    background: var(--bg);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .tab:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .toolbar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .search-input {
+    flex: 1;
+    min-width: 200px;
+    max-width: 400px;
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    font-family: inherit;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+  }
+
+  .search-input::placeholder {
+    color: var(--text-muted);
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(0, 212, 170, 0.2);
+  }
+
+  .count {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .threads-panel {
+    margin-bottom: 2rem;
+  }
+
+  .threads-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .thread-item {
+    margin: 0;
+  }
+
+  .thread-link {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius);
+    color: var(--text);
+    text-decoration: none;
+    border: 1px solid transparent;
+    transition: background 0.15s, border-color 0.15s;
+  }
+
+  .thread-link:hover {
+    background: var(--bg-card);
+    border-color: var(--border);
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .thread-link:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .outro {
+    color: var(--text-muted);
+    font-size: 0.9375rem;
+    margin-top: 1.5rem;
+  }
+
+  .outro a {
+    font-weight: 500;
+  }
+</style>

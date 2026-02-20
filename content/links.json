@@ -374,5 +374,23 @@
     "date": null,
     "themes": ["whistleblowers"],
     "description": "Playlist YouTube. Ancien responsable AATIP, podcast quotidien UAP disclosure."
+  },
+  {
+    "url": "https://www.metabunk.org/threads/video-purportedly-from-afghanistan-showing-some-dripping-objects.13765/",
+    "title": "Metabunk — Afghanistan 2011 « dripping objects »",
+    "type": "analysis",
+    "source_doc": null,
+    "date": "2024",
+    "themes": [],
+    "description": "Analyse de la vidéo Kandahar : fusées cibles thermiques sous parachute, A-10, géoloc. Mick West et al."
+  },
+  {
+    "url": "https://www.metabunk.org/forums/ufo-reports-from-the-us-military-and-government.60/",
+    "title": "Metabunk — UFO Reports from the US Military and Government",
+    "type": "analysis",
+    "source_doc": null,
+    "date": null,
+    "themes": ["observables-physique", "combat-legislatif", "whistleblowers"],
+    "description": "Forum d'analyse : vidéos Navy (FLIR, Gimbal, Go Fast), AARO, NASA, Tic Tac, Yemen Orb, Syria UAP, triangle Persian Gulf, etc. Mick West et communauté."
   }
 ]

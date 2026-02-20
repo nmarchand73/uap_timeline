@@ -2,6 +2,10 @@
 
 Site web pour explorer 8 documents + 1 documentaire vidéo (The Age of Disclosure) via une timeline (1945-2026), des filtres thématiques, une vidéothèque et un graphe de relations personnes/incidents/programmes.
 
+## Déploiement
+
+- **Netlify** : [incredible-mousse-cfff92](https://app.netlify.com/projects/incredible-mousse-cfff92) — le site est déployé automatiquement à partir du dépôt GitHub.
+
 ## Lancer le site
 
 ```bash

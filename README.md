@@ -4,7 +4,8 @@ Site web pour explorer 8 documents + 1 documentaire vidéo (The Age of Disclosur
 
 ## Déploiement
 
-- **Netlify** : [incredible-mousse-cfff92](https://app.netlify.com/projects/incredible-mousse-cfff92) — le site est déployé automatiquement à partir du dépôt GitHub.
+- **Live** : [uap-timeline.netlify.app](https://uap-timeline.netlify.app)
+- **Netlify** : [incredible-mousse-cfff92](https://app.netlify.com/projects/incredible-mousse-cfff92) — déploiement automatique depuis GitHub.
 
 ## Lancer le site
 

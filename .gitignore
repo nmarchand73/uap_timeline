@@ -10,6 +10,13 @@ dist/
 .env.local
 .env.*.local
 
+# Video / gros fichiers (ne pas versionner)
+*.mkv
+*.mp4
+*.webm
+*.mov
+*.avi
+
 # OS
 .DS_Store
 Thumbs.db

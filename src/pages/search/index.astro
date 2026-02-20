@@ -79,24 +79,42 @@ const searchData = {
     type: 'video',
   })),
 };
+// JSON pour le client : échapper </script> pour ne pas casser la balise HTML
+const searchDataJson = JSON.stringify(searchData).replace(/<\/script>/gi, '<\\/script>');
 ---
 
 <BaseLayout title="Recherche" description="Recherche plein texte sur documents, personnes, incidents, thèmes, programmes, DIRD, chapitres documentaire et vidéos.">
   <h1>Recherche</h1>
-  <p class="intro">Recherche dans les documents, personnes, incidents, thèmes, programmes, DIRD, chapitres du documentaire et vidéos.</p>
+  <p class="intro">Recherche dans les documents, personnes, incidents, thèmes, programmes, DIRD, chapitres du documentaire et vidéos. Les résultats s’affichent ci-dessous dès que vous tapez ou cliquez sur « Rechercher ».</p>
 
   <div class="search-box">
     <input type="search" id="search-input" placeholder="Ex. Elizondo, Nimitz, AATIP, Roswell…" autofocus autocomplete="off" />
+    <button type="button" id="search-btn" class="search-btn">Rechercher</button>
     <span id="search-status" class="search-status" aria-live="polite"></span>
   </div>
 
   <div id="search-results" class="search-results"></div>
 
-  <script type="module">
+  <script type="application/json" id="search-data" set:html={searchDataJson}></script>
+  <script type="importmap">
+    {"imports": {"fuse.js": "https://esm.sh/fuse.js@7.0.0"}}
+  </script>
+  <script type="module" is:inline>
     import Fuse from 'fuse.js';
 
-    const el = document.getElementById('search-data');
-    const searchData = el ? JSON.parse(el.textContent || '{}') : {};
+    const results = document.getElementById('search-results');
+    const showError = (msg) => {
+      if (results) results.innerHTML = '<p class="no-results">' + msg + '</p>';
+    };
+
+    let searchData = {};
+    try {
+      const el = document.getElementById('search-data');
+      if (el && el.textContent) searchData = JSON.parse(el.textContent);
+    } catch (e) {
+      console.error('Search data failed to load', e);
+      showError('Erreur au chargement des données. Rechargez la page.');
+    }
 
     const TYPE_LABELS = {
       doc: 'Document',
@@ -110,14 +128,14 @@ const searchData = {
     };
 
     const items = [
-      ...(searchData.docs || []).map(d => ({ ...d, searchText: `${d.title} ${d.authors} ${d.themes || ''}` })),
-      ...(searchData.people || []).map(p => ({ ...p, searchText: `${p.name} ${p.role} ${p.bio || ''}` })),
-      ...(searchData.incidents || []).map(i => ({ ...i, searchText: `${i.name} ${i.description || ''} ${i.date || ''}` })),
-      ...(searchData.themes || []).map(t => ({ ...t, searchText: `${t.label} ${t.description || ''} ${t.id}` })),
-      ...(searchData.programs || []).map(p => ({ ...p, searchText: `${p.name} ${p.description || ''} ${p.dates || ''}` })),
-      ...(searchData.dirds || []).map(d => ({ ...d, searchText: `${d.title} ${d.author} ${d.affiliation || ''}` })),
-      ...(searchData.chapters || []).map(c => ({ ...c, searchText: `${c.title} ${c.description || ''} ${c.key_quote || ''}` })),
-      ...(searchData.videos || []).map(v => ({ ...v, searchText: `${v.title} ${v.description || ''} ${v.event_date || ''}` })),
+      ...(searchData.docs || []).map((d) => ({ ...d, searchText: `${d.title} ${d.authors} ${d.themes || ''}` })),
+      ...(searchData.people || []).map((p) => ({ ...p, searchText: `${p.name} ${p.role} ${p.bio || ''}` })),
+      ...(searchData.incidents || []).map((i) => ({ ...i, searchText: `${i.name} ${i.description || ''} ${i.date || ''}` })),
+      ...(searchData.themes || []).map((t) => ({ ...t, searchText: `${t.label} ${t.description || ''} ${t.id}` })),
+      ...(searchData.programs || []).map((p) => ({ ...p, searchText: `${p.name} ${p.description || ''} ${p.dates || ''}` })),
+      ...(searchData.dirds || []).map((d) => ({ ...d, searchText: `${d.title} ${d.author} ${d.affiliation || ''}` })),
+      ...(searchData.chapters || []).map((c) => ({ ...c, searchText: `${c.title} ${c.description || ''} ${c.key_quote || ''}` })),
+      ...(searchData.videos || []).map((v) => ({ ...v, searchText: `${v.title} ${v.description || ''} ${v.event_date || ''}` })),
     ];
 
     const fuse = new Fuse(items, {
@@ -128,8 +146,8 @@ const searchData = {
     });
 
     const input = document.getElementById('search-input');
-    const results = document.getElementById('search-results');
     const status = document.getElementById('search-status');
+    const searchBtn = document.getElementById('search-btn');
 
     function escapeHtml(s) {
       if (!s) return '';
@@ -194,34 +212,36 @@ const searchData = {
     }
 
     function runSearch() {
-      const q = input.value.trim();
+      const q = input?.value?.trim() ?? '';
       if (!q) {
-        results.innerHTML = '';
-        status.textContent = '';
+        if (results) results.innerHTML = '';
+        if (status) status.textContent = '';
         return;
       }
-
+      if (items.length === 0) {
+        if (results) results.innerHTML = '<p class="no-results">Données de recherche non chargées. Rechargez la page.</p>';
+        if (status) status.textContent = '';
+        return;
+      }
       const matches = fuse.search(q).slice(0, 30);
       const byType = {};
-      matches.forEach(m => {
+      matches.forEach((m) => {
         const t = m.item.type;
         if (!byType[t]) byType[t] = [];
         byType[t].push(m);
       });
-
       const order = ['person', 'incident', 'doc', 'chapter', 'video', 'dird', 'program', 'theme'];
       let html = '';
-      order.forEach(type => {
+      order.forEach((type) => {
         const list = byType[type];
         if (!list || list.length === 0) return;
         const label = TYPE_LABELS[type] || type;
         html += `<div class="result-group"><h3 class="result-group-title">${label}</h3>`;
-        html += list.map(m => renderItem(m.item)).join('');
+        html += list.map((m) => renderItem(m.item)).join('');
         html += '</div>';
       });
-
-      results.innerHTML = html || '<p class="no-results">Aucun résultat pour « ' + escapeHtml(q) + ' »</p>';
-      status.textContent = matches.length > 0 ? `${matches.length} résultat${matches.length > 1 ? 's' : ''}` : 'Aucun résultat';
+      if (results) results.innerHTML = html || '<p class="no-results">Aucun résultat pour « ' + escapeHtml(q) + ' »</p>';
+      if (status) status.textContent = matches.length > 0 ? `${matches.length} résultat${matches.length > 1 ? 's' : ''}` : 'Aucun résultat';
     }
 
     let debounceTimer;
@@ -231,17 +251,17 @@ const searchData = {
         debounceTimer = setTimeout(runSearch, 200);
       });
       input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') runSearch();
         if (e.key === 'Escape') {
           input.value = '';
           input.blur();
           results.innerHTML = '';
-          status.textContent = '';
+          if (status) status.textContent = '';
         }
       });
+      if (searchBtn) searchBtn.addEventListener('click', runSearch);
+      if (input.value.trim()) setTimeout(runSearch, 100);
     }
-  </script>
-  <script type="application/json" id="search-data">
-    {JSON.stringify(searchData)}
   </script>
 </BaseLayout>
 
@@ -254,17 +274,41 @@ const searchData = {
   .search-box {
     margin-bottom: 1.5rem;
     position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
   }
 
   .search-box input {
     width: 100%;
-    max-width: 560px;
+    max-width: 400px;
     padding: 0.875rem 1rem;
     font-size: 1rem;
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 8px;
     color: var(--text);
+  }
+
+  .search-btn {
+    padding: 0.875rem 1.25rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--bg);
+    background: var(--accent);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .search-btn:hover {
+    background: var(--accent-dim);
+  }
+
+  .search-btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
 
   .search-box input:focus {

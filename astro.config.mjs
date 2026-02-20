@@ -6,4 +6,9 @@ export default defineConfig({
   build: {
     assets: '_assets',
   },
+  vite: {
+    optimizeDeps: {
+      include: ['fuse.js'],
+    },
+  },
 });

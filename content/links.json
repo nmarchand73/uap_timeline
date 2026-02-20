@@ -338,5 +338,41 @@
     "date": null,
     "themes": ["whistleblowers"],
     "description": "Podcast UAP, paranormal, science. Épisodes visuels sur le site et YouTube @JeremyCorbell."
+  },
+  {
+    "url": "https://www.youtube.com/playlist?list=PL6PrA6lo8rJLRExhMvX6wKyNzy0hr_QM3",
+    "title": "Reality Check with Ross Coulthart",
+    "type": "podcast",
+    "source_doc": null,
+    "date": null,
+    "themes": ["whistleblowers"],
+    "description": "Playlist YouTube. Émission UAP avec Ross Coulthart (NewsNation), enquêtes et interviews."
+  },
+  {
+    "url": "https://www.youtube.com/playlist?list=PLXdU8QbJkboeMcvUNyGpb9h6FUS9cVBti",
+    "title": "Need to Know — Ross Coulthart & Bryce Zabel",
+    "type": "podcast",
+    "source_doc": null,
+    "date": null,
+    "themes": ["whistleblowers"],
+    "description": "Playlist YouTube. Enquêtes UAP, disclosure. needtoknow.today"
+  },
+  {
+    "url": "https://www.youtube.com/playlist?list=PL8PQ7q4Nt4a5u3U9S5eKxiU7hI9FUMAul",
+    "title": "Richard Dolan — Intelligent Disclosure",
+    "type": "podcast",
+    "source_doc": null,
+    "date": null,
+    "themes": ["whistleblowers"],
+    "description": "Playlist YouTube. Historien UAP de référence, analyses et disclosure."
+  },
+  {
+    "url": "https://www.youtube.com/playlist?list=PL2v0pRryEhXgXDV1u7tQCKElCLiiDaw07",
+    "title": "Luis Elizondo — UAP Disclosure Updates",
+    "type": "podcast",
+    "source_doc": null,
+    "date": null,
+    "themes": ["whistleblowers"],
+    "description": "Playlist YouTube. Ancien responsable AATIP, podcast quotidien UAP disclosure."
   }
 ]
